@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from "mongoose";
+import { Schema, model, models } from "mongoose";
 import bcryptjs from "bcryptjs";
 
 const userSchema = new Schema(
@@ -47,6 +47,6 @@ userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcryptjs.compare(password, this.password);
 };
 
-const User = model["User"] || model("User", userSchema);
+const User = models["User"] || model("User", userSchema);
 
 export default User;

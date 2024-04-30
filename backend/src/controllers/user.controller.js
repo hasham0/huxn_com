@@ -38,7 +38,7 @@ const createUser = asyncHandler(async (request, response) => {
     _id: createNewUser._id,
     email: createNewUser.email,
   };
-  const accessToken = await generateAccessToken(data);
+  const accessToken = generateAccessToken(data);
 
   /* send responce */
   response
@@ -57,6 +57,8 @@ const createUser = asyncHandler(async (request, response) => {
 //note: LOGIN USER_
 const loginUser = asyncHandler(async (request, response) => {
   const { email, password } = request.body;
+
+  console.log("🚀 ~ loginUser ~ body:", request.body);
 
   /* check validation */
   if ([email, password].some((item) => item.trim() === "")) {
@@ -90,20 +92,25 @@ const loginUser = asyncHandler(async (request, response) => {
     _id: isUserExists._id,
     email: isUserExists.email,
   };
-  const accessToken = await generateAccessToken(data);
+  const accessToken = generateAccessToken(data);
+  console.log("🚀 ~ loginUser ~ accessToken:", accessToken);
 
+  const user = await User.findOne({ _id: isUserExists._id }).select(
+    "-password"
+  );
   /* send responce */
   response
     .status(200)
     .cookie(ACCESS_TOKEN, accessToken, {
       httpOnly: true,
+      secure: true,
       secure: process.env.NODE_ENV !== "development",
       sameSite: "strict",
       maxAge: 30 * 24 * 60 * 60 * 1000,
     })
     .json({
       message: "user login successfully",
-      data: isUserExists,
+      data: user,
     });
 });
 
@@ -241,7 +248,7 @@ const deleteUser = asyncHandler(async (request, response) => {
   });
 });
 
-//!EXPORT CONTROLLERS_
+//! EXPORT CONTROLLERS_
 export {
   createUser,
   loginUser,

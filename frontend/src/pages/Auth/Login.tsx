@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { FormEncType, Link, useLocation, useNavigate } from "react-router-dom";
+import {  Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   RootState,
@@ -40,8 +40,8 @@ export default function Login({}: Props) {
   }, [navigate, redirect, userInfo]);
 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
     try {
+      event.preventDefault();
       const res = await login(userCredientials).unwrap();
       console.log(res);
       //      dispatched(setCredientials({ res.data }));
@@ -75,6 +75,7 @@ export default function Login({}: Props) {
                 type="email"
                 id="email"
                 className="w-full p-2 mt-1 border rounded"
+                name="email"
                 placeholder="Enter email"
                 value={userCredientials.email}
                 onChange={changedInputsHandler}
@@ -91,6 +92,7 @@ export default function Login({}: Props) {
               <input
                 type="password"
                 id="password"
+                name="password"
                 className="w-full p-2 mt-1 border rounded"
                 placeholder="Enter password"
                 value={userCredientials.password}
@@ -114,7 +116,7 @@ export default function Login({}: Props) {
               New Customer?{" "}
               <Link
                 to={redirect ? `/register?redirect=${redirect}` : "/register"}
-                className="hover:underline text-pink-500"
+                className="text-pink-500 hover:underline"
               >
                 Register
               </Link>

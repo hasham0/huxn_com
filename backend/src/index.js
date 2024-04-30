@@ -1,7 +1,6 @@
 // packages
 import express from "express";
 import cookieParser from "cookie-parser";
-import path from "path";
 import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
@@ -14,7 +13,7 @@ import userRoutes from "./routers/user.route.js";
 // set variable
 const app = express();
 
-// set dotenv config
+//note: set dotenv config_
 dotenv.config({
   path: "../.env",
 });
