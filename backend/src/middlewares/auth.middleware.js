@@ -8,7 +8,8 @@ const isUserAuthenticated = asyncHandler(async (request, response, next) => {
   const getAccessToken =
     request.cookies[ACCESS_TOKEN] ||
     (request.headers.cookie &&
-      request.headers.cookie.split("; ")[0].split("=")[1]);
+      request.headers.cookie.split("; ")[0].split("=")[1]) ||
+    request.headers.authorization.split(" ")[1];
 
   if (!getAccessToken) {
     throw new Error("please login to access");

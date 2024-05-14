@@ -1,7 +1,10 @@
 import asyncHandler from "../helpers/asyncHanlder.js";
 import User from "../models/user.model.js";
-import { generateAccessToken } from "../utils/generateTokens.js";
-import { ACCESS_TOKEN } from "../constant.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/generateTokens.js";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constant.js";
 
 //note: CREATE USER_
 const createUser = asyncHandler(async (request, response) => {
@@ -38,17 +41,21 @@ const createUser = asyncHandler(async (request, response) => {
     _id: createNewUser._id,
     email: createNewUser.email,
   };
-  const accessToken = generateAccessToken(data);
+  const accessTokenGen = generateAccessToken(data);
+  const refreshTokenGen = generateAccessToken(data._id);
 
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV !== "development",
+    sameSite: "Strict",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+  };
   /* send responce */
+
   response
     .status(200)
-    .cookie(ACCESS_TOKEN, accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    })
+    .cookie(ACCESS_TOKEN, accessTokenGen, cookieOptions)
+    .cookie(REFRESH_TOKEN, refreshTokenGen, cookieOptions)
     .json({
       message: "user created successfully",
     });
@@ -57,8 +64,6 @@ const createUser = asyncHandler(async (request, response) => {
 //note: LOGIN USER_
 const loginUser = asyncHandler(async (request, response) => {
   const { email, password } = request.body;
-
-  console.log("🚀 ~ loginUser ~ body:", request.body);
 
   /* check validation */
   if ([email, password].some((item) => item.trim() === "")) {
@@ -69,7 +74,7 @@ const loginUser = asyncHandler(async (request, response) => {
   /* check user if existed */
   const isUserExists = await User.findOne({
     $or: [{ email }],
-  });
+  }).select("+password");
 
   if (!isUserExists) {
     throw {
@@ -92,26 +97,26 @@ const loginUser = asyncHandler(async (request, response) => {
     _id: isUserExists._id,
     email: isUserExists.email,
   };
-  const accessToken = generateAccessToken(data);
-  console.log("🚀 ~ loginUser ~ accessToken:", accessToken);
 
-  const user = await User.findOne({ _id: isUserExists._id }).select(
-    "-password"
-  );
-  /* send responce */
+  const accesTokenGen = generateAccessToken(data);
+  const refreshTokenGen = generateRefreshToken(data._id);
+
+  /* get user */
+  const user = await User.findOne({ _id: isUserExists._id });
+
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV !== "development",
+    sameSite: "Strict",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+  };
+
+  // /* send response with cookie */
   response
     .status(200)
-    .cookie(ACCESS_TOKEN, accessToken, {
-      httpOnly: true,
-      secure: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    })
-    .json({
-      message: "user login successfully",
-      data: user,
-    });
+    .cookie(ACCESS_TOKEN, accesTokenGen, cookieOptions)
+    .cookie(REFRESH_TOKEN, refreshTokenGen, cookieOptions)
+    .json({ message: "User login successful", data: user });
 });
 
 //note: USER PROFILE_
@@ -119,7 +124,7 @@ const userProfile = asyncHandler(async (request, response) => {
   const { userId } = request;
 
   /* check user if already existed */
-  const isUserExists = await User.find({ _id: userId }).select("-password");
+  const isUserExists = await User.findOne({ _id: userId });
   if (!isUserExists) {
     throw {
       statusCode: 401,
@@ -138,7 +143,7 @@ const updateProfile = asyncHandler(async (request, response) => {
   const { username, email } = request.body;
 
   /* check user if  existed */
-  const isUserExists = await User.findById({ _id: userId }).select("-password");
+  const isUserExists = await User.findById({ _id: userId });
   if (!isUserExists) {
     throw {
       statusCode: 401,
@@ -163,7 +168,7 @@ const updateProfile = asyncHandler(async (request, response) => {
       },
     },
     { new: true }
-  ).select("-password");
+  );
 
   await updateUserEmailAndUsername.save({ validateBeforeSave: false });
 
@@ -219,6 +224,10 @@ const logoutUser = asyncHandler(async (request, response) => {
   response
     .status(200)
     .clearCookie(ACCESS_TOKEN, {
+      httpOnly: true,
+      expires: new Date(0),
+    })
+    .clearCookie(REFRESH_TOKEN, {
       httpOnly: true,
       expires: new Date(0),
     })

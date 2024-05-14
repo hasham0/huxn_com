@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import { Router } from "express";
 import {
   createUser,
   deleteUser,
@@ -22,7 +22,7 @@ import {
 // set variable
 const router = Router();
 
-// user routes
+//note: user routes and rights_
 router.route("/registerUser").post(createUser);
 router.route("/auth/loginUser").post(loginUser);
 router.route("/auth/profile").get(isUserAuthenticated, userProfile);
@@ -31,7 +31,7 @@ router.route("/auth/updatePassword").put(isUserAuthenticated, updatePassword);
 router.route("/auth/logoutUser").post(isUserAuthenticated, logoutUser);
 router.route("/auth/deleteUser").delete(isUserAuthenticated, deleteUser);
 
-// admin routes
+//note: admin routes and rights_
 router
   .route("/allUsers")
   .get(isUserAuthenticated, isUserAuthorizeAdmin, allUsers);

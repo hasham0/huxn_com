@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import {  Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   RootState,
@@ -10,14 +10,16 @@ import { useLoginMutation } from "../../redux/api/userApi";
 import { LoginTS } from "../../types";
 import Loader from "../../components/Loader";
 import { setCredientials } from "../../redux/features/auth/authSlice";
-type Props = {};
+import { userTem } from "../../lib/zod";
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
-export default function Login({}: Props) {
+export default function Login() {
   const dispatched = useAppDispatch();
   const navigate = useNavigate();
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
-  const redirect = sp.get("redirect") || "/";
+  const redirect = sp.get("redirect") || "/profile";
   const [login, { isLoading }] = useLoginMutation();
   const { userInfo } = useAppSelector((state: RootState) => state.auth);
   const [userCredientials, setUserCredientials] = useState<LoginTS>({
@@ -43,14 +45,20 @@ export default function Login({}: Props) {
     try {
       event.preventDefault();
       const res = await login(userCredientials).unwrap();
-      console.log(res);
-      //      dispatched(setCredientials({ res.data }));
+      console.log("🚀 ~ submitHandler ~ res:", res);
+      const userData = await userTem.safeParseAsync(res.data);
+      if (!userData.data) {
+        throw new Error("data is undefined");
+      }
+      dispatched(
+        setCredientials({
+          data: userData.data,
+        })
+      );
       toast.success(res.message);
       navigate(redirect);
     } catch (err) {
       console.log("🚀  submitHandler  err:", err);
-
-      //   toast.error(err?.data?.message || err.error);
     }
   };
 
@@ -60,10 +68,7 @@ export default function Login({}: Props) {
         <div className="mr-[4rem] mt-[5rem]">
           <h1 className="mb-4 text-2xl font-semibold">Sign In</h1>
 
-          <form
-            onSubmit={submitHandler}
-            className="container w-[40rem]"
-          >
+          <form onSubmit={submitHandler} className="container w-[40rem]">
             <div className="my-[2rem]">
               <label
                 htmlFor="email"

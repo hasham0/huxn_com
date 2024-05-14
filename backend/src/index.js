@@ -28,6 +28,8 @@ app.use(
   cors({
     origin: process.env.CROSS_ORIGIN,
     credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
   })
 );
 
