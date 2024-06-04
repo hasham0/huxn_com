@@ -11,10 +11,10 @@ const createUser = asyncHandler(async (request, response) => {
   const { username, email, password, isAdmin } = request.body;
 
   /* check validation */
-  if ([username, email, password].some((item) => item.trim() === "")) {
-    throw {
+  if ([username, email, password].some((item) => item?.trim() === "")) {
+    throw new Error({
       message: "please fill all fields",
-    };
+    });
   }
   /* check user if existed */
   const isUserExists = await User.findOne({
@@ -22,10 +22,10 @@ const createUser = asyncHandler(async (request, response) => {
   });
 
   if (isUserExists) {
-    throw {
+    throw new Error({
       statusCode: 401,
       message: "user already existed",
-    };
+    });
   }
 
   /* create new user */
@@ -38,7 +38,7 @@ const createUser = asyncHandler(async (request, response) => {
 
   /* generate access token */
   const data = {
-    _id: createNewUser._id,
+    _id: createNewUser._id.toString(),
     email: createNewUser.email,
   };
   const accessTokenGen = generateAccessToken(data);
@@ -50,14 +50,15 @@ const createUser = asyncHandler(async (request, response) => {
     sameSite: "Strict",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   };
-  /* send responce */
 
+  /* send responce */
   response
     .status(200)
     .cookie(ACCESS_TOKEN, accessTokenGen, cookieOptions)
     .cookie(REFRESH_TOKEN, refreshTokenGen, cookieOptions)
     .json({
       message: "user created successfully",
+      data: createNewUser,
     });
 });
 
@@ -66,10 +67,10 @@ const loginUser = asyncHandler(async (request, response) => {
   const { email, password } = request.body;
 
   /* check validation */
-  if ([email, password].some((item) => item.trim() === "")) {
-    throw {
+  if ([email, password].some((item) => item?.trim() === "")) {
+    throw new Error({
       message: "please fill all fields",
-    };
+    });
   }
   /* check user if existed */
   const isUserExists = await User.findOne({
@@ -77,24 +78,24 @@ const loginUser = asyncHandler(async (request, response) => {
   }).select("+password");
 
   if (!isUserExists) {
-    throw {
+    throw new Error({
       statusCode: 401,
       message: "user not existed",
-    };
+    });
   }
 
   /* check if password valid or not */
-  const isPasswordValid = isUserExists.isPasswordCorrect(password);
+  const isPasswordValid = await isUserExists.isPasswordCorrect(password);
 
   if (!isPasswordValid) {
-    throw {
+    throw new Error({
       statusCode: 401,
       message: "password not matched",
-    };
+    });
   }
   /* generate access token */
   const data = {
-    _id: isUserExists._id,
+    _id: isUserExists._id.toString(),
     email: isUserExists.email,
   };
 
@@ -110,7 +111,6 @@ const loginUser = asyncHandler(async (request, response) => {
     sameSite: "Strict",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   };
-
   // /* send response with cookie */
   response
     .status(200)
@@ -126,10 +126,10 @@ const userProfile = asyncHandler(async (request, response) => {
   /* check user if already existed */
   const isUserExists = await User.findOne({ _id: userId });
   if (!isUserExists) {
-    throw {
+    throw new Error({
       statusCode: 401,
       message: "user not found",
-    };
+    });
   }
   /* send responce */
   response.status(200).json({
@@ -145,17 +145,17 @@ const updateProfile = asyncHandler(async (request, response) => {
   /* check user if  existed */
   const isUserExists = await User.findById({ _id: userId });
   if (!isUserExists) {
-    throw {
+    throw new Error({
       statusCode: 401,
       message: "user not found",
-    };
+    });
   }
 
   /* check validation */
   if ([username, email].every((item) => item.trim() === "")) {
-    throw {
+    throw new Error({
       message: "please fill all fields",
-    };
+    });
   }
 
   /* update user profile */
@@ -187,17 +187,17 @@ const updatePassword = asyncHandler(async (request, response) => {
   /* check user if already existed */
   const isUserExists = await User.findById({ _id: userId });
   if (!isUserExists) {
-    throw {
+    throw new Error({
       statusCode: 401,
       message: "user not found",
-    };
+    });
   }
 
   /* check validation */
   if ([password].every((item) => item.trim() === "")) {
-    throw {
+    throw new Error({
       message: "please fill the password",
-    };
+    });
   }
 
   /* update user password */
@@ -243,13 +243,13 @@ const deleteUser = asyncHandler(async (request, response) => {
   /* check user if existed */
   const isUserExists = await User.findById({ _id: userId });
   if (!isUserExists) {
-    throw {
+    throw new Error({
       statusCode: 401,
       message: "user not found",
-    };
+    });
   }
   /* delete user */
-  const deleteUser = await User.findByIdAndDelete({ _id: userId });
+  await User.findByIdAndDelete({ _id: userId });
 
   /* send responce */
   response.status(200).json({

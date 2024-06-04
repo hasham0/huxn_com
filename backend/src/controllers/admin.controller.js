@@ -3,14 +3,14 @@ import User from "../models/user.model.js";
 
 //note: ALL USERS_
 const allUsers = asyncHandler(async (request, response) => {
-  const isUsersExist = await User.find({}).select("-password");
+  const isUsersExist = await User.find({});
 
   /* check users if existed */
   if (!isUsersExist) {
-    throw {
+    throw new Error({
       statusCode: 401,
-      message: "users not found",
-    };
+      message: "user not found",
+    });
   }
 
   /* send responce */
@@ -24,18 +24,61 @@ const getUserByID = asyncHandler(async (request, response) => {
   const { _id } = request.params;
 
   /* check user if existed */
-  const isUserExist = await User.findById({ _id }).select("-password");
+  const isUserExist = await User.findById({ _id });
 
   if (!isUserExist) {
-    throw {
+    throw new Error({
       statusCode: 401,
-      message: "users not found",
-    };
+      message: "user not found",
+    });
   }
 
   /* send responce */
   response.json({
     data: isUserExist,
+  });
+});
+
+//note: UPDATE USER PROFILE_
+const updateUserProfileByID = asyncHandler(async (request, response) => {
+  const { _id } = request.params;
+  const { username, email } = request.body;
+
+  /* check user if existed */
+  const isUserExists = await User.findById({ _id });
+
+  if (!isUserExists) {
+    throw new Error({
+      statusCode: 401,
+      message: "user not found",
+    });
+  }
+
+  /* check validation */
+  if ([username].every((item) => item.trim() === "")) {
+    throw new Error({
+      message: "please fill the password",
+    });
+  }
+
+  /* update user role */
+  const updateUserProfile = await User.findByIdAndUpdate(
+    { _id },
+    {
+      $set: {
+        username: username,
+        email: email,
+      },
+    },
+    { new: true }
+  );
+
+  await updateUserProfile.save({ validateBeforeSave: false });
+
+  /* send responce */
+  response.status(200).json({
+    message: "user profile update successfully",
+    data: updateUserProfile,
   });
 });
 
@@ -45,20 +88,20 @@ const updateUserRoleByID = asyncHandler(async (request, response) => {
   const { isAdmin } = request.body;
 
   /* check user if existed */
-  const isUserExists = await User.findById({ _id }).select("-password");
+  const isUserExists = await User.findById({ _id });
 
   if (!isUserExists) {
-    throw {
+    throw new Error({
       statusCode: 401,
       message: "user not found",
-    };
+    });
   }
 
   /* check validation */
   if ([isAdmin].every((item) => item.trim() === "")) {
-    throw {
+    throw new Error({
       message: "please fill the password",
-    };
+    });
   }
 
   /* update user role */
@@ -70,7 +113,7 @@ const updateUserRoleByID = asyncHandler(async (request, response) => {
       },
     },
     { new: true }
-  ).select("-password");
+  );
 
   await updateUserRole.save({ validateBeforeSave: false });
 
@@ -89,22 +132,22 @@ const deleteUserByID = asyncHandler(async (request, response) => {
   const isUserExists = await User.findById({ _id });
 
   if (!isUserExists) {
-    throw {
+    throw new Error({
       statusCode: 401,
       message: "user not found",
-    };
+    });
   }
 
   /* check user if he is an admin */
   if (isUserExists.isAdmin) {
-    throw {
+    throw new Error({
       statusCode: 401,
       message: "can not delete admin",
-    };
+    });
   }
 
   /* delete user */
-  const deleteUser = await User.findByIdAndDelete({ _id });
+  await User.findByIdAndDelete({ _id });
 
   /* send responce */
   response.status(200).json({
@@ -113,4 +156,10 @@ const deleteUserByID = asyncHandler(async (request, response) => {
 });
 
 // !EXPORT CONTROLLERS_
-export { allUsers, getUserByID, updateUserRoleByID, deleteUserByID };
+export {
+  allUsers,
+  getUserByID,
+  updateUserRoleByID,
+  deleteUserByID,
+  updateUserProfileByID,
+};

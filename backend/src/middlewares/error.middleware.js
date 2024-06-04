@@ -4,7 +4,8 @@ function errorMiddleware(error, request, response, next) {
   let errors = error.errors || [];
 
   //  Customize error message based on error type
-  const err = Object.assign({}, error);
+  const err = Object.assign({}, errors);
+
   switch (err.name) {
     case "ValidationError":
       message = Object.values(err.errors)
@@ -26,7 +27,7 @@ function errorMiddleware(error, request, response, next) {
       }
       break;
     default:
-      message: message;
+      message;
       break;
   }
 

@@ -12,6 +12,7 @@ import {
   allUsers,
   deleteUserByID,
   getUserByID,
+  updateUserProfileByID,
   updateUserRoleByID,
 } from "../controllers/admin.controller.js";
 import {
@@ -36,8 +37,11 @@ router
   .route("/allUsers")
   .get(isUserAuthenticated, isUserAuthorizeAdmin, allUsers);
 router
-  .route("/userProfile/:_id")
+  .route("/userDetails/:_id")
   .get(isUserAuthenticated, isUserAuthorizeAdmin, getUserByID);
+router
+  .route("/updateProfile/:_id")
+  .put(isUserAuthenticated, isUserAuthorizeAdmin, updateUserProfileByID);
 router
   .route("/updateRole/:_id")
   .put(isUserAuthenticated, isUserAuthorizeAdmin, updateUserRoleByID);

@@ -27,8 +27,7 @@ export default function Login() {
     password: "",
   });
   const changedInputsHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const name = event.target.name;
-    const value = event.target.value;
+    const { name, value } = event.target;
     setUserCredientials({
       ...userCredientials,
       [name]: value,
@@ -45,7 +44,6 @@ export default function Login() {
     try {
       event.preventDefault();
       const res = await login(userCredientials).unwrap();
-      console.log("🚀 ~ submitHandler ~ res:", res);
       const userData = await userTem.safeParseAsync(res.data);
       if (!userData.data) {
         throw new Error("data is undefined");
@@ -117,7 +115,7 @@ export default function Login() {
           </form>
 
           <div className="mt-4">
-            <p className="text-black">
+            <p className="text-white">
               New Customer?{" "}
               <Link
                 to={redirect ? `/register?redirect=${redirect}` : "/register"}

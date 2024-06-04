@@ -27,12 +27,12 @@ export default function Navigation() {
   const toggleDropdown = (): void => {
     setDropdownOpen(!dropdownOpen);
   };
-  // const toggleSidebar = (): void => {
-  //   setShowSidebar(!showSidebar);
-  // };
-  // const closeSidebar = (): void => {
-  //   setShowSidebar(false);
-  // };
+  const toggleSidebar = (): void => {
+    setShowSidebar(!showSidebar);
+  };
+  const closeSidebar = (): void => {
+    setShowSidebar(false);
+  };
 
   const [logoutApiCall] = useLogoutMutation();
 
@@ -60,12 +60,9 @@ export default function Navigation() {
           {/* <!-- Home --> */}
           <Link
             to="/"
-            className="hover:translate-x-2 flex items-center transition-transform transform"
+            className="flex items-center transition-transform transform hover:translate-x-2"
           >
-            <AiOutlineHome
-              className="mr-2 mt-[3rem]"
-              size={26}
-            />
+            <AiOutlineHome className="mr-2 mt-[3rem]" size={26} />
             <span className="hidden nav-item-name mt-[3rem] uppercase">
               home
             </span>
@@ -73,12 +70,9 @@ export default function Navigation() {
           {/* <!-- Shop --> */}
           <Link
             to="/shop"
-            className="hover:translate-x-2 flex items-center transition-transform transform"
+            className="flex items-center transition-transform transform hover:translate-x-2"
           >
-            <AiOutlineShoppingCart
-              className="mr-2 mt-[3rem]"
-              size={26}
-            />
+            <AiOutlineShoppingCart className="mr-2 mt-[3rem]" size={26} />
             <span className="hidden nav-item-name mt-[3rem] uppercase">
               shop
             </span>
@@ -86,12 +80,9 @@ export default function Navigation() {
           {/* <!-- Favorite --> */}
           <Link
             to="/favorite"
-            className="hover:translate-x-2 flex items-center transition-transform transform"
+            className="flex items-center transition-transform transform hover:translate-x-2"
           >
-            <FaHeart
-              className="mr-2 mt-[3rem]"
-              size={26}
-            />
+            <FaHeart className="mr-2 mt-[3rem]" size={26} />
             <span className="hidden nav-item-name mt-[3rem] uppercase">
               favorite
             </span>
@@ -99,50 +90,134 @@ export default function Navigation() {
         </nav>
 
         {/* <!-- show user info --> */}
-        <div className="relative">
-          <button
-            onClick={toggleDropdown}
-            className="text-gray-800f items-cente focus:outline-none flex"
-          >
-            {userInfo ? (
-              <span className="text-white">{userInfo?.username}</span>
-            ) : (
-              <></>
+        {userInfo && (
+          <div className="relative">
+            <button
+              onClick={toggleDropdown}
+              className="flex text-gray-800f items-cente focus:outline-none"
+            >
+              {userInfo && (
+                <span className="text-white">{userInfo?.username}</span>
+              )}
+              {userInfo && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-4 w-4 ml-1 ${
+                    dropdownOpen ? "transform rotate-180" : ""
+                  }`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="white"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d={dropdownOpen ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}
+                  />
+                </svg>
+              )}
+            </button>
+            {dropdownOpen && userInfo && (
+              <ul
+                className={`absolute right-0 mt-2 mr-14 space-y-2 bg-white text-gray-600 ${
+                  !userInfo.isAdmin ? "-top-20" : "-top-80"
+                } `}
+              >
+                {userInfo.isAdmin && (
+                  <>
+                    <li>
+                      <Link
+                        to="/admin/dashboard"
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
+                        Dashboard
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/admin/productlist"
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
+                        Products
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/admin/categorylist"
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
+                        Category
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/admin/orderlist"
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
+                        Orders
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/admin/userlist"
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
+                        Users
+                      </Link>
+                    </li>
+                  </>
+                )}
+                <li>
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Profile
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={logoutHandler}
+                    className="block w-full px-4 py-2 text-left hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
             )}
-          </button>
-        </div>
+          </div>
+        )}
 
         {/* <!-- login and register button --> */}
-        <ul>
-          <li>
-            <Link
-              to="/login"
-              className="hover:translate-x-2 flex items-center transition-transform transform"
-            >
-              <AiOutlineLogin
-                className="mr-2 mt-[3rem]"
-                size={26}
-              />
-              <span className="hidden nav-item-name mt-[3rem] capitalize">
-                login
-              </span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/register"
-              className="hover:translate-x-2 flex items-center transition-transform transform"
-            >
-              <AiOutlineUserAdd
-                className="mr-2 mt-[3rem]"
-                size={26}
-              />
-              <span className="hidden nav-item-name mt-[3rem] capitalize">
-                register
-              </span>
-            </Link>
-          </li>
-        </ul>
+        {!userInfo && (
+          <>
+            <ul>
+              <li>
+                <Link
+                  to="/login"
+                  className="flex items-center transition-transform transform hover:translate-x-2"
+                >
+                  <AiOutlineLogin className="mr-2 mt-[3rem]" size={26} />
+                  <span className="hidden nav-item-name mt-[3rem] capitalize">
+                    login
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/register"
+                  className="flex items-center transition-transform transform hover:translate-x-2"
+                >
+                  <AiOutlineUserAdd className="mr-2 mt-[3rem]" size={26} />
+                  <span className="hidden nav-item-name mt-[3rem] capitalize">
+                    register
+                  </span>
+                </Link>
+              </li>
+            </ul>
+          </>
+        )}
       </section>
     </>
   );

@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/dbConnection.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import userRoutes from "./routers/user.route.js";
+import categoryRoutes from "./routers/category.route.js";
 
 // set variable
 const app = express();
@@ -35,6 +36,7 @@ app.use(
 
 // set routes
 app.use("/api/users", userRoutes);
+app.use("/api/category", categoryRoutes);
 
 // set global level error handling middlwere
 app.use(errorMiddleware);
