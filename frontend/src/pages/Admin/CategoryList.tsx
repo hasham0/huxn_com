@@ -6,7 +6,7 @@ import {
   // useCategoryByIDQuery,
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
-} from "../../redux/api/categoryapi";
+} from "../../redux/api/categoryApi";
 import CategoryForm from "../../components/CategoryForm";
 import { CategoryTS } from "../../types";
 import Model from "../../components/Model";
