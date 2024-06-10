@@ -7,14 +7,11 @@ const allUsers = asyncHandler(async (request, response) => {
 
   /* check users if existed */
   if (!isUsersExist) {
-    throw new Error({
-      statusCode: 401,
-      message: "user not found",
-    });
+    throw new Error("user not found");
   }
 
   /* send responce */
-  response.json({
+  response.status(200).json({
     data: isUsersExist,
   });
 });
@@ -27,14 +24,11 @@ const getUserByID = asyncHandler(async (request, response) => {
   const isUserExist = await User.findById({ _id });
 
   if (!isUserExist) {
-    throw new Error({
-      statusCode: 401,
-      message: "user not found",
-    });
+    throw new Error("user not found");
   }
 
   /* send responce */
-  response.json({
+  response.status(200).json({
     data: isUserExist,
   });
 });
@@ -48,17 +42,12 @@ const updateUserProfileByID = asyncHandler(async (request, response) => {
   const isUserExists = await User.findById({ _id });
 
   if (!isUserExists) {
-    throw new Error({
-      statusCode: 401,
-      message: "user not found",
-    });
+    throw new Error("user not found");
   }
 
   /* check validation */
   if ([username].every((item) => item.trim() === "")) {
-    throw new Error({
-      message: "please fill the password",
-    });
+    throw new Error("please fill the password");
   }
 
   /* update user role */
@@ -91,17 +80,12 @@ const updateUserRoleByID = asyncHandler(async (request, response) => {
   const isUserExists = await User.findById({ _id });
 
   if (!isUserExists) {
-    throw new Error({
-      statusCode: 401,
-      message: "user not found",
-    });
+    throw new Error("user not found");
   }
 
   /* check validation */
   if ([isAdmin].every((item) => item.trim() === "")) {
-    throw new Error({
-      message: "please fill the password",
-    });
+    throw new Error("please fill the password");
   }
 
   /* update user role */
@@ -132,18 +116,12 @@ const deleteUserByID = asyncHandler(async (request, response) => {
   const isUserExists = await User.findById({ _id });
 
   if (!isUserExists) {
-    throw new Error({
-      statusCode: 401,
-      message: "user not found",
-    });
+    throw new Error("user not found");
   }
 
   /* check user if he is an admin */
   if (isUserExists.isAdmin) {
-    throw new Error({
-      statusCode: 401,
-      message: "can not delete admin",
-    });
+    throw new Error("can not delete admin");
   }
 
   /* delete user */

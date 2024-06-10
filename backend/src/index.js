@@ -4,12 +4,15 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import path from "path";
 
 // utils,routers and constant
 import connectDB from "./config/dbConnection.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import userRoutes from "./routers/user.route.js";
 import categoryRoutes from "./routers/category.route.js";
+import productRoutes from "./routers/product.route.js";
+import uploadRoutes from "./routers/upload.route.js";
 
 // set variable
 const app = express();
@@ -22,7 +25,7 @@ dotenv.config({
 // set middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(express.static("public"));
+app.use(express.static("public"));
 app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(
@@ -37,6 +40,14 @@ app.use(
 // set routes
 app.use("/api/users", userRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/product", productRoutes);
+app.use("/api/upload", uploadRoutes);
+
+const __dirname = path.resolve();
+app.use(
+  "./public/temp",
+  express.static(path.join(__dirname + "./public/temp"))
+);
 
 // set global level error handling middlwere
 app.use(errorMiddleware);

@@ -12,9 +12,7 @@ const createUser = asyncHandler(async (request, response) => {
 
   /* check validation */
   if ([username, email, password].some((item) => item?.trim() === "")) {
-    throw new Error({
-      message: "please fill all fields",
-    });
+    throw new Error("please fill all fields");
   }
   /* check user if existed */
   const isUserExists = await User.findOne({
@@ -22,10 +20,7 @@ const createUser = asyncHandler(async (request, response) => {
   });
 
   if (isUserExists) {
-    throw new Error({
-      statusCode: 401,
-      message: "user already existed",
-    });
+    throw new Error("user already existed");
   }
 
   /* create new user */
@@ -68,9 +63,7 @@ const loginUser = asyncHandler(async (request, response) => {
 
   /* check validation */
   if ([email, password].some((item) => item?.trim() === "")) {
-    throw new Error({
-      message: "please fill all fields",
-    });
+    throw new Error("please fill all fields");
   }
   /* check user if existed */
   const isUserExists = await User.findOne({
@@ -78,20 +71,14 @@ const loginUser = asyncHandler(async (request, response) => {
   }).select("+password");
 
   if (!isUserExists) {
-    throw new Error({
-      statusCode: 401,
-      message: "user not existed",
-    });
+    throw new Error("user not exist");
   }
 
   /* check if password valid or not */
   const isPasswordValid = await isUserExists.isPasswordCorrect(password);
 
   if (!isPasswordValid) {
-    throw new Error({
-      statusCode: 401,
-      message: "password not matched",
-    });
+    throw new Error("password not matched");
   }
   /* generate access token */
   const data = {
@@ -126,10 +113,7 @@ const userProfile = asyncHandler(async (request, response) => {
   /* check user if already existed */
   const isUserExists = await User.findOne({ _id: userId });
   if (!isUserExists) {
-    throw new Error({
-      statusCode: 401,
-      message: "user not found",
-    });
+    throw new Error("user not exist");
   }
   /* send responce */
   response.status(200).json({
@@ -145,17 +129,12 @@ const updateProfile = asyncHandler(async (request, response) => {
   /* check user if  existed */
   const isUserExists = await User.findById({ _id: userId });
   if (!isUserExists) {
-    throw new Error({
-      statusCode: 401,
-      message: "user not found",
-    });
+    throw new Error("user not exist");
   }
 
   /* check validation */
   if ([username, email].every((item) => item.trim() === "")) {
-    throw new Error({
-      message: "please fill all fields",
-    });
+    throw new Error("please fill all fields");
   }
 
   /* update user profile */
@@ -187,17 +166,12 @@ const updatePassword = asyncHandler(async (request, response) => {
   /* check user if already existed */
   const isUserExists = await User.findById({ _id: userId });
   if (!isUserExists) {
-    throw new Error({
-      statusCode: 401,
-      message: "user not found",
-    });
+    throw new Error("user not found");
   }
 
   /* check validation */
   if ([password].every((item) => item.trim() === "")) {
-    throw new Error({
-      message: "please fill the password",
-    });
+    throw new Error("please fill the password");
   }
 
   /* update user password */
@@ -243,10 +217,7 @@ const deleteUser = asyncHandler(async (request, response) => {
   /* check user if existed */
   const isUserExists = await User.findById({ _id: userId });
   if (!isUserExists) {
-    throw new Error({
-      statusCode: 401,
-      message: "user not found",
-    });
+    throw new Error("user not found");
   }
   /* delete user */
   await User.findByIdAndDelete({ _id: userId });

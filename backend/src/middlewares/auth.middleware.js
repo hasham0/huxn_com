@@ -13,18 +13,12 @@ const isUserAuthenticated = asyncHandler(async (request, response, next) => {
       request.headers.authorization.split(" ")[1];
 
     if (!getAccessToken) {
-      throw {
-        statusCode: 401,
-        message: "please login to access",
-      };
+      throw new Error("please login to access");
     }
 
     const decoded = verifyAccessToken(getAccessToken);
     if (!decoded) {
-      throw {
-        statusCode: 401,
-        message: "not authorize, access token fail",
-      };
+      throw new Error("not authorize, access token fail");
     }
     request.userId = decoded._id;
     next();
@@ -35,15 +29,17 @@ const isUserAuthenticated = asyncHandler(async (request, response, next) => {
 
 //note: Authorize Admin_
 const isUserAuthorizeAdmin = asyncHandler(async (request, response, next) => {
-  const { userId } = request;
-  const user = await User.findOne({ _id: userId });
+  try {
+    const { userId } = request;
+    const user = await User.findOne({ _id: userId });
 
-  if (!(user && user?.isAdmin)) {
-    throw {
-      statusCode: 401,
-      message: "invalid request, user is not authorize as admin",
-    };
+    if (!(user && user?.isAdmin)) {
+      throw new Error("invalid request, user is not authorize as admin");
+    }
+    request.user = user;
+    next();
+  } catch (error) {
+    next(error);
   }
-  next();
 });
 export { isUserAuthenticated, isUserAuthorizeAdmin };

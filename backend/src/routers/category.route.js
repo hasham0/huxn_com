@@ -6,8 +6,8 @@ import {
 import {
   allCategories,
   createCategory,
-  updateCategory,
-  deleteCategory,
+  updateCategoryByID,
+  deleteCategoryByID,
   categoryByID,
 } from "../controllers/category.controller.js";
 
@@ -26,10 +26,10 @@ router
 
 router
   .route("/updateCategoryItem/:_id")
-  .put(isUserAuthenticated, isUserAuthorizeAdmin, updateCategory);
+  .put(isUserAuthenticated, isUserAuthorizeAdmin, updateCategoryByID);
 
 router
   .route("/deleteCategoryItem/:_id")
-  .delete(isUserAuthenticated, isUserAuthorizeAdmin, deleteCategory);
+  .delete(isUserAuthenticated, isUserAuthorizeAdmin, deleteCategoryByID);
 
 export default router;

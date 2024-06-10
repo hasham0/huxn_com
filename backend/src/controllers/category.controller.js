@@ -7,10 +7,11 @@ const allCategories = asyncHandler(async (request, response) => {
   if (!getAllCategories) {
     throw new Error("categories not found");
   }
-  return response
+  response
     .status(200)
     .json({ message: "all category", data: getAllCategories });
 });
+
 // note: get all categories:
 const categoryByID = asyncHandler(async (request, response) => {
   const { _id } = request.params;
@@ -18,7 +19,7 @@ const categoryByID = asyncHandler(async (request, response) => {
   if (!category) {
     throw new Error("categoriy not found");
   }
-  return response.status(200).json({ message: "category", data: category });
+  response.status(200).json({ message: "category", data: category });
 });
 
 // note: create new product:
@@ -34,13 +35,13 @@ const createCategory = asyncHandler(async (request, response) => {
   const newCateory = await Category.create({
     name: name,
   });
-  return response
+  response
     .status(200)
     .json({ message: "new category creadted", data: newCateory });
 });
 
 // note: update product:
-const updateCategory = asyncHandler(async (request, response) => {
+const updateCategoryByID = asyncHandler(async (request, response) => {
   const { newCategoryName } = request.body;
   const { _id } = request.params;
   const isCategoryExisted = await Category.findOne({ _id: _id });
@@ -56,20 +57,20 @@ const updateCategory = asyncHandler(async (request, response) => {
     },
     { new: true }
   );
-  return response.status(200).json({
+  response.status(200).json({
     message: "category updated successfully",
     data: updateCategoryName,
   });
 });
 // note: update product:
-const deleteCategory = asyncHandler(async (request, response) => {
+const deleteCategoryByID = asyncHandler(async (request, response) => {
   const { _id } = request.params;
   const isCategoryExisted = await Category.findOne({ _id: _id });
   if (!isCategoryExisted) {
     throw new Error("category not found");
   }
   await Category.findByIdAndDelete({ _id: _id });
-  return response.status(200).json({
+  response.status(200).json({
     message: "category deleted successfully",
   });
 });
@@ -78,7 +79,7 @@ const deleteCategory = asyncHandler(async (request, response) => {
 export {
   createCategory,
   allCategories,
-  updateCategory,
-  deleteCategory,
+  updateCategoryByID,
+  deleteCategoryByID,
   categoryByID,
 };
