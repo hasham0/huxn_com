@@ -1,27 +1,22 @@
 import { Router } from "express";
 import { upload } from "../utils/multer.js";
-import asyncHandler from "../helpers/asyncHanlder.js";
+import uploadImageMethod from "../utils/uplodImage.js";
+import {
+  isUserAuthenticated,
+  isUserAuthorizeAdmin,
+} from "../middlewares/auth.middleware.js";
 
 // set variable
 const router = Router();
 
-router.route("/").post(
-  upload.single("image"),
-  asyncHandler((request, response, next) => {
-    try {
-      const imgPath = request.file.path;
-      if (!imgPath) {
-        throw new Error("error while uploading image");
-      }
-      response.status(200).send({
-        message: "Image uploaded successfully",
-        image: `/${request.file.path}`,
-      });
-    } catch (error) {
-      next(error);
-    }
-  })
-);
+router
+  .route("/")
+  .post(
+    isUserAuthenticated,
+    isUserAuthorizeAdmin,
+    upload.single("image"),
+    uploadImageMethod
+  );
 
 //! export route_
 

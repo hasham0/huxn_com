@@ -12,7 +12,7 @@ const allCategories = asyncHandler(async (request, response) => {
     .json({ message: "all category", data: getAllCategories });
 });
 
-// note: get all categories:
+// note: get categories by id:
 const categoryByID = asyncHandler(async (request, response) => {
   const { _id } = request.params;
   const category = await Category.findOne({ _id: _id });

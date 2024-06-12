@@ -20,10 +20,23 @@ type CategoryResponceTS = {
   message: string;
   data: CategoryTS[];
 };
+
+type ProductTS = {
+  id?: string;
+  name: string;
+  description: string;
+  price: number;
+  category: CategoryTS;
+  quantity: number;
+  brand: string;
+  image: string;
+  stock: number;
+};
 export type {
   RegisterTS,
   LoginTS,
   UserProfileTS,
   CategoryTS,
+  ProductTS,
   CategoryResponceTS,
 };

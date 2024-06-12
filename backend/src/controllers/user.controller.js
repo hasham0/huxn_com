@@ -4,7 +4,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from "../utils/generateTokens.js";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constant.js";
+import { ACCESS_TOKEN, REFRESH_TOKEN, cookieOptions } from "../constant.js";
 
 //note: CREATE USER_
 const createUser = asyncHandler(async (request, response) => {
@@ -38,13 +38,6 @@ const createUser = asyncHandler(async (request, response) => {
   };
   const accessTokenGen = generateAccessToken(data);
   const refreshTokenGen = generateAccessToken(data._id);
-
-  const cookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV !== "development",
-    sameSite: "Strict",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  };
 
   /* send responce */
   response
@@ -92,13 +85,7 @@ const loginUser = asyncHandler(async (request, response) => {
   /* get user */
   const user = await User.findOne({ _id: isUserExists._id });
 
-  const cookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV !== "development",
-    sameSite: "Strict",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  };
-  // /* send response with cookie */
+  /* send response with cookie */
   response
     .status(200)
     .cookie(ACCESS_TOKEN, accesTokenGen, cookieOptions)

@@ -11,6 +11,7 @@ import UsersList from "../pages/Admin/UsersList";
 import OrderList from "../pages/Admin/OrderList";
 import UserOrder from "../pages/User/UserOrder";
 import CategoryList from "../pages/Admin/CategoryList";
+import ProductList from "../pages/Admin/ProductList";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
         <Route path="/admin/userlist" element={<UsersList />} />
         <Route path="/admin/orderlist" element={<OrderList />} />
         <Route path="/admin/categorylist" element={<CategoryList />} />
+        <Route path="/admin/productlist" element={<ProductList />} />
       </Route>
     </Route>
   )

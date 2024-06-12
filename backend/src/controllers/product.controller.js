@@ -126,15 +126,15 @@ const addProductReviewByID = asyncHandler(async (request, response) => {
 
 // note: add products:
 const addNewProduct = asyncHandler(async (request, response) => {
-  const { name, description, price, category, quantity, brand, image } =
+  const { name, description, price, category, quantity, brand } =
     request.fields;
+  const check = [name, description, price, category, quantity, brand];
+  const imgPath = request.file.path;
+  image = imgPath;
+  check.push(image);
 
   /* check validation */
-  if (
-    [name, description, price, category, quantity, brand, image].some(
-      (item) => item?.trim() === ""
-    )
-  ) {
+  if (check.some((item) => item?.trim() === "")) {
     throw new Error("please fill all fields");
   }
   /* check product if existed */
