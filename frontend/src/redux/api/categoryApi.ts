@@ -1,19 +1,21 @@
-import { CategoryResponceTS } from "../../types";
+import { CategoryTS } from "../../types";
 import { apiSlice } from "./apiSlice";
 
 export const categoryApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    allCategories: builder.query<CategoryResponceTS, void>({
-      query: () => ({
-        url: `${process.env.REACT_APP_CATEGORY_POINT!}/allCategories`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-      }),
-    }),
+    allCategories: builder.query<{ message: string; data: CategoryTS[] }, void>(
+      {
+        query: () => ({
+          url: `${process.env.REACT_APP_CATEGORY_POINT!}/allCategories`,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+        }),
+      }
+    ),
     createCategory: builder.mutation({
       query: (data: { name: string }) => ({
         url: `${process.env.REACT_APP_CATEGORY_POINT!}/newCategoryItem`,

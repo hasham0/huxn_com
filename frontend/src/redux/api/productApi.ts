@@ -77,12 +77,22 @@ export const productApi = apiSlice.injectEndpoints({
     addNewProduct: builder.mutation({
       query: (data: ProductTS) => ({
         url: `${process.env.REACT_APP_PRODUCT_POINT!}/addNewProduct`,
-        method: "POST",
-        mode: "cors",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        body: JSON.stringify({
+          name: data.name,
+          description: data.description,
+          price: data.price,
+          category: data.category._id,
+          quantity: data.quantity,
+          brand: data.brand,
+          image: data.image,
+          stock: data.stock,
+        }),
       }),
     }),
     updateProduct: builder.mutation({

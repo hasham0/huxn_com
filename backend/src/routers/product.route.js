@@ -40,7 +40,7 @@ router
 
 router
   .route("/addNewProduct")
-  .post(isUserAuthenticated, isUserAuthorizeAdmin, formidable(), addNewProduct);
+  .post(isUserAuthenticated, isUserAuthorizeAdmin, addNewProduct);
 
 router
   .route("/updateProduct/:_id")

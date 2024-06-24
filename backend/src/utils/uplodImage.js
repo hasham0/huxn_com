@@ -13,9 +13,14 @@ const uploadImageMethod = asyncHandler(async (request, response, next) => {
     if (!cloudImg.url) {
       throw new Error("error while updating avatar");
     }
+    const imgObj = {
+      originalFilename: cloudImg.original_filename,
+      secureUrl: cloudImg.secure_url,
+      imgUrl: cloudImg.url,
+    };
     response.status(200).send({
       message: "Image uploaded successfully",
-      imageUrl: cloudImg.url,
+      imageUrl: imgObj,
     });
   } catch (error) {
     next(error);

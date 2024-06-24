@@ -126,17 +126,26 @@ const addProductReviewByID = asyncHandler(async (request, response) => {
 
 // note: add products:
 const addNewProduct = asyncHandler(async (request, response) => {
-  const { name, description, price, category, quantity, brand } =
-    request.fields;
-  const check = [name, description, price, category, quantity, brand];
-  const imgPath = request.file.path;
-  image = imgPath;
-  check.push(image);
-
+  let { name, description, price, category, quantity, brand, image, stock } =
+    request.body;
+  const check = [
+    name,
+    description,
+    price,
+    category,
+    quantity,
+    brand,
+    image,
+    stock,
+  ];
+  console.log(check);
   /* check validation */
   if (check.some((item) => item?.trim() === "")) {
     throw new Error("please fill all fields");
   }
+  price = Number(price);
+  quantity = Number(quantity);
+  stock = Number(stock);
   /* check product if existed */
   const isProductExists = await Product.findOne({
     name: name,
@@ -146,7 +155,7 @@ const addNewProduct = asyncHandler(async (request, response) => {
     throw new Error("product already existed");
   }
   const newProduct = await Product.create({
-    ...request.fields,
+    ...request.body,
   });
   response.status(200).json({
     message: "new product added successfully",

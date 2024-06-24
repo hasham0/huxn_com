@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -8,20 +8,28 @@ import {
 import { useAllCategoriesQuery } from "../../redux/api/categoryApi";
 import { ProductTS } from "../../types";
 type Props = {};
-
+type ImgTS = {
+  originalFilename: string;
+  secureUrl: string;
+  imgUrl: string;
+};
 export default function ProductList({}: Props) {
   const [product, setProduct] = useState<ProductTS>({
     name: "",
     description: "",
     brand: "",
-    category: { _id: "", name: "" },
+    category: { _id: "" },
     quantity: 0,
     image: "",
     price: 0,
     stock: 0,
   });
 
-  const [imgUrl, setImgUrl] = useState<string>("");
+  const [imgUrl, setImgUrl] = useState<ImgTS>({
+    imgUrl: "",
+    originalFilename: "",
+    secureUrl: "",
+  });
   const navigate = useNavigate();
 
   const changedInputsHandler = (
@@ -36,12 +44,11 @@ export default function ProductList({}: Props) {
     });
   };
   const [uploadProductImage] = useUploadProductImageMutation();
-  const [addNewProduct] = useAddNewProductMutation();
-  const { data: categories } = useAllCategoriesQuery();
+  const [addProduct] = useAddNewProductMutation();
+  const { data: categoriesData } = useAllCategoriesQuery();
 
   const uploadFileHandler = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    console.log("🚀 ~ uploadFileHandler ~ file:", file);
 
     if (file) {
       try {
@@ -51,10 +58,9 @@ export default function ProductList({}: Props) {
         console.log("🚀 ~ uploadFileHandler ~ response:", response);
         setProduct({
           ...product,
-          image: response.image,
+          image: response.imageUrl.secureUrl,
         });
-        setImgUrl(response.image);
-
+        setImgUrl(response.imageUrl);
         toast.success(response.message);
       } catch (error) {
         toast.error("Image upload failed");
@@ -62,13 +68,17 @@ export default function ProductList({}: Props) {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
-      await addNewProduct(product).unwrap();
-      toast.success("Product added successfully");
-      navigate("/admin/products");
+      event.preventDefault();
+      console.log(product);
+      const data = await addProduct(product).unwrap();
+      console.log("🚀 ~ handleSubmit ~ data:", data);
+      // toast.success("Product added successfully");
+      // navigate("/admin/products");
     } catch (error) {
       toast.error("Failed to add product");
+      console.log(error);
     }
   };
 
@@ -76,23 +86,29 @@ export default function ProductList({}: Props) {
     <div className="container xl:mx-[9rem] sm:mx-[0]">
       <div className="flex flex-col md:flex-row">
         {/* <AdminMenu /> */}
-        <div className="md:w-3/4 p-3">
+        <form onSubmit={handleSubmit} className="md:w-3/4 p-3">
           <div className="h-12">Create Product</div>
 
           {product.image && imgUrl && (
             <div className="text-center">
               <img
-                src={imgUrl}
+                src={imgUrl.imgUrl}
                 alt="product"
-                className="block mx-auto max-h-[200px]"
+                className="block mx-auto max-h-[200px] mb-4"
               />
             </div>
           )}
 
           <div className="mb-3">
             <label className="border text-white px-4 block w-full text-center rounded-lg cursor-pointer font-bold py-11">
-              {product.image ? product.image : "Upload Image"}
-              <input type="file" name="image" onChange={uploadFileHandler} />
+              {product.image ? imgUrl.originalFilename : "Upload Image"}
+              &nbsp; &nbsp; &nbsp;
+              <input
+                className="text-white"
+                type="file"
+                name="image"
+                onChange={uploadFileHandler}
+              />
             </label>
           </div>
 
@@ -114,6 +130,8 @@ export default function ProductList({}: Props) {
                   type="number"
                   className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
                   name="price"
+                  minLength={3}
+                  min={100}
                   value={product.price}
                   onChange={changedInputsHandler}
                 />
@@ -126,6 +144,8 @@ export default function ProductList({}: Props) {
                   type="number"
                   className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
                   name="quantity"
+                  minLength={1}
+                  min={1}
                   value={product.quantity}
                   onChange={changedInputsHandler}
                 />
@@ -160,6 +180,8 @@ export default function ProductList({}: Props) {
                   className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
                   name="stock"
                   value={product.stock}
+                  minLength={1}
+                  min={1}
                   onChange={changedInputsHandler}
                 />
               </div>
@@ -175,23 +197,24 @@ export default function ProductList({}: Props) {
                   <option value="" disabled>
                     Choose Category
                   </option>
-                  {categories?.data?.map((c) => (
-                    <option key={c._id} value={c._id}>
-                      {c.name}
-                    </option>
-                  ))}
+                  {categoriesData &&
+                    categoriesData?.data?.map((c) => (
+                      <option key={c._id} value={c._id}>
+                        {c.name}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>
 
             <button
-              onClick={handleSubmit}
+              type="submit"
               className="py-4 px-10 mt-5 rounded-lg text-lg font-bold bg-pink-600"
             >
               Submit
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
