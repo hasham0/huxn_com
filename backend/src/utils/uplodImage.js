@@ -1,5 +1,4 @@
 import asyncHandler from "../helpers/asyncHanlder.js";
-import Product from "../models/product.model.js";
 import uploadOnCloudinary from "./cloudinary.js";
 
 const uploadImageMethod = asyncHandler(async (request, response, next) => {

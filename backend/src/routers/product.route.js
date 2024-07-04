@@ -16,8 +16,6 @@ import {
   topProducts,
   newProducts,
 } from "../controllers/product.controller.js";
-import { upload } from "../utils/multer.js";
-import uploadImageMidd from "../utils/uplodImage.js";
 
 // set variable
 const router = Router();

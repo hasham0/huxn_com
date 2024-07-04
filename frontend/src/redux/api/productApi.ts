@@ -3,7 +3,7 @@ import { apiSlice } from "./apiSlice";
 
 export const productApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getProducts: builder.query({
+    getProducts: builder.query<ProductTS[], { keyword: string }>({
       query: ({ keyword }) => ({
         url: `${process.env.REACT_APP_PRODUCT_POINT!}/allProducts`,
         method: "GET",
@@ -16,7 +16,7 @@ export const productApi = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
       providesTags: ["Product"],
     }),
-    getProductByID: builder.query({
+    getProductByID: builder.query<ProductTS, string>({
       query: (productID: string) => ({
         url: `${process.env
           .REACT_APP_PRODUCT_POINT!}/singleProduct/${productID}`,
@@ -27,7 +27,7 @@ export const productApi = apiSlice.injectEndpoints({
         },
       }),
     }),
-    getLimitedProducts: builder.query({
+    getLimitedProducts: builder.query<ProductTS[], void>({
       query: () => ({
         url: `${process.env.REACT_APP_PRODUCT_POINT!}/limitedProducts`,
         method: "GET",
@@ -37,7 +37,7 @@ export const productApi = apiSlice.injectEndpoints({
         },
       }),
     }),
-    getTopProducts: builder.query({
+    getTopProducts: builder.query<ProductTS[], void>({
       query: () => ({
         url: `${process.env.REACT_APP_PRODUCT_POINT!}/topProducts`,
         method: "GET",
@@ -47,7 +47,7 @@ export const productApi = apiSlice.injectEndpoints({
         },
       }),
     }),
-    getNewProduct: builder.query({
+    getNewProduct: builder.query<ProductTS, void>({
       query: () => ({
         url: `${process.env.REACT_APP_PRODUCT_POINT!}/newProducts`,
         method: "GET",
@@ -85,12 +85,12 @@ export const productApi = apiSlice.injectEndpoints({
         credentials: "include",
         body: JSON.stringify({
           name: data.name,
+          image: data.image,
+          brand: data.brand,
+          quantity: data.quantity,
+          category: data.category,
           description: data.description,
           price: data.price,
-          category: data.category._id,
-          quantity: data.quantity,
-          brand: data.brand,
-          image: data.image,
           stock: data.stock,
         }),
       }),

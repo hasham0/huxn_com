@@ -7,6 +7,7 @@ import {
 } from "../../redux/api/productApi";
 import { useAllCategoriesQuery } from "../../redux/api/categoryApi";
 import { ProductTS } from "../../types";
+import AdminMenu from "./AdminMenu";
 type Props = {};
 type ImgTS = {
   originalFilename: string;
@@ -16,11 +17,11 @@ type ImgTS = {
 export default function ProductList({}: Props) {
   const [product, setProduct] = useState<ProductTS>({
     name: "",
-    description: "",
-    brand: "",
-    category: { _id: "" },
-    quantity: 0,
     image: "",
+    brand: "",
+    quantity: 0,
+    category: "",
+    description: "",
     price: 0,
     stock: 0,
   });
@@ -73,9 +74,23 @@ export default function ProductList({}: Props) {
       event.preventDefault();
       console.log(product);
       const data = await addProduct(product).unwrap();
-      console.log("🚀 ~ handleSubmit ~ data:", data);
-      // toast.success("Product added successfully");
-      // navigate("/admin/products");
+      toast.success(data.message);
+      navigate("/admin/products");
+      setImgUrl({
+        imgUrl: "",
+        originalFilename: "",
+        secureUrl: "",
+      });
+      setProduct({
+        name: "",
+        image: "",
+        brand: "",
+        quantity: 0,
+        category: "",
+        description: "",
+        price: 0,
+        stock: 0,
+      });
     } catch (error) {
       toast.error("Failed to add product");
       console.log(error);
@@ -85,7 +100,7 @@ export default function ProductList({}: Props) {
   return (
     <div className="container xl:mx-[9rem] sm:mx-[0]">
       <div className="flex flex-col md:flex-row">
-        {/* <AdminMenu /> */}
+        <AdminMenu />
         <form onSubmit={handleSubmit} className="md:w-3/4 p-3">
           <div className="h-12">Create Product</div>
 
@@ -191,7 +206,7 @@ export default function ProductList({}: Props) {
                 <select
                   className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
                   name="category"
-                  value={product.category._id}
+                  value={product.category}
                   onChange={changedInputsHandler}
                 >
                   <option value="" disabled>

@@ -26,7 +26,7 @@ type ProductTS = {
   name: string;
   description: string;
   price: number;
-  category: { _id: string };
+  category: "";
   quantity: number;
   brand: string;
   image: string;
