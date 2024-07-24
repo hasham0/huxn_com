@@ -163,7 +163,7 @@ export default function Register({}: Props) {
         </form>
 
         <div className="mt-4">
-          <p className="text-black">
+          <p className="text-white">
             Already have an account?{" "}
             <Link
               to={redirect ? `/login?redirect=${redirect}` : "/login"}

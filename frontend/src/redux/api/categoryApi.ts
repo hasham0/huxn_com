@@ -1,4 +1,5 @@
 import { CategoryTS } from "../../types";
+import { CATEGORY_END_POINT } from "../constants";
 import { apiSlice } from "./apiSlice";
 
 export const categoryApi = apiSlice.injectEndpoints({
@@ -6,7 +7,7 @@ export const categoryApi = apiSlice.injectEndpoints({
     allCategories: builder.query<{ message: string; data: CategoryTS[] }, void>(
       {
         query: () => ({
-          url: `${process.env.REACT_APP_CATEGORY_POINT!}/allCategories`,
+          url: `${CATEGORY_END_POINT}/allCategories`,
           headers: {
             "Content-Type": "application/json",
           },
@@ -14,11 +15,13 @@ export const categoryApi = apiSlice.injectEndpoints({
           mode: "cors",
           credentials: "include",
         }),
+        keepUnusedDataFor: 5,
+        providesTags: ["Category"],
       }
     ),
     createCategory: builder.mutation({
       query: (data: { name: string }) => ({
-        url: `${process.env.REACT_APP_CATEGORY_POINT!}/newCategoryItem`,
+        url: `${CATEGORY_END_POINT}/newCategoryItem`,
         method: "POST",
         mode: "cors",
         headers: {
@@ -29,9 +32,7 @@ export const categoryApi = apiSlice.injectEndpoints({
     }),
     categoryByID: builder.query({
       query: (data: { _id: string }) => ({
-        url: `${process.env.REACT_APP_CATEGORY_POINT!}/onlyCategory/${
-          data._id
-        }`,
+        url: `${CATEGORY_END_POINT}/onlyCategory/${data._id}`,
         method: "GET",
         mode: "cors",
         headers: {
@@ -41,9 +42,7 @@ export const categoryApi = apiSlice.injectEndpoints({
     }),
     updateCategory: builder.mutation({
       query: (data: { _id: string; name: string }) => ({
-        url: `${process.env.REACT_APP_CATEGORY_POINT!}/updateCategoryItem/${
-          data._id
-        }`,
+        url: `${CATEGORY_END_POINT}/updateCategoryItem/${data._id}`,
         method: "PUT",
         mode: "cors",
         headers: {
@@ -54,9 +53,7 @@ export const categoryApi = apiSlice.injectEndpoints({
     }),
     deleteCategory: builder.mutation({
       query: (data: { _id: string }) => ({
-        url: `${process.env.REACT_APP_CATEGORY_POINT!}/deleteCategoryItem/${
-          data._id
-        }`,
+        url: `${CATEGORY_END_POINT}/deleteCategoryItem/${data._id}`,
         method: "DELETE",
         mode: "cors",
         headers: {

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   useAllCategoriesQuery,
@@ -23,7 +23,9 @@ export default function CategoryList({}: Props) {
   const [createCategory] = useCreateCategoryMutation();
   const [updateCategory] = useUpdateCategoryMutation();
   const [deleteCategory] = useDeleteCategoryMutation();
+
   const { data: categoryData, refetch } = useAllCategoriesQuery();
+
   const handleCreateCategory = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 

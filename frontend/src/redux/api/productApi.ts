@@ -1,11 +1,12 @@
 import { ProductTS } from "../../types";
+import { PRODUCT_END_POINT, UPLOAD_END_POINT } from "../constants";
 import { apiSlice } from "./apiSlice";
 
 export const productApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query<ProductTS[], { keyword: string }>({
       query: ({ keyword }) => ({
-        url: `${process.env.REACT_APP_PRODUCT_POINT!}/allProducts`,
+        url: `${PRODUCT_END_POINT}/allProducts`,
         method: "GET",
         params: { keyword },
         mode: "cors",
@@ -18,8 +19,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
     getProductByID: builder.query<ProductTS, string>({
       query: (productID: string) => ({
-        url: `${process.env
-          .REACT_APP_PRODUCT_POINT!}/singleProduct/${productID}`,
+        url: `${PRODUCT_END_POINT}}/singleProduct/${productID}`,
         method: "GET",
         mode: "cors",
         headers: {
@@ -29,7 +29,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
     getLimitedProducts: builder.query<ProductTS[], void>({
       query: () => ({
-        url: `${process.env.REACT_APP_PRODUCT_POINT!}/limitedProducts`,
+        url: `${PRODUCT_END_POINT}/limitedProducts`,
         method: "GET",
         mode: "cors",
         headers: {
@@ -39,7 +39,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
     getTopProducts: builder.query<ProductTS[], void>({
       query: () => ({
-        url: `${process.env.REACT_APP_PRODUCT_POINT!}/topProducts`,
+        url: `${PRODUCT_END_POINT}/topProducts`,
         method: "GET",
         mode: "cors",
         headers: {
@@ -49,7 +49,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
     getNewProduct: builder.query<ProductTS, void>({
       query: () => ({
-        url: `${process.env.REACT_APP_PRODUCT_POINT!}/newProducts`,
+        url: `${PRODUCT_END_POINT}/newProducts`,
         method: "GET",
         mode: "cors",
         headers: {
@@ -63,9 +63,7 @@ export const productApi = apiSlice.injectEndpoints({
         rating: string;
         comment: string;
       }) => ({
-        url: `${process.env.REACT_APP_PRODUCT_POINT!}/productReview/${
-          data.productID
-        }/reviews`,
+        url: `${PRODUCT_END_POINT}/productReview/${data.productID}/reviews`,
         method: "POST",
         mode: "cors",
         headers: {
@@ -76,7 +74,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
     addNewProduct: builder.mutation({
       query: (data: ProductTS) => ({
-        url: `${process.env.REACT_APP_PRODUCT_POINT!}/addNewProduct`,
+        url: `${PRODUCT_END_POINT}/addNewProduct`,
         headers: {
           "Content-Type": "application/json",
         },
@@ -97,7 +95,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
     updateProduct: builder.mutation({
       query: (data: ProductTS) => ({
-        url: `${process.env.REACT_APP_PRODUCT_POINT!}/updateProduct/${data.id}`,
+        url: `${PRODUCT_END_POINT}/updateProduct/${data.id}`,
         method: "PATCH",
         mode: "cors",
         headers: {
@@ -108,7 +106,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
     uploadProductImage: builder.mutation({
       query: (data: FormData) => ({
-        url: `${process.env.REACT_APP_UPLOAD_POINT!}`,
+        url: `${UPLOAD_END_POINT}`,
         method: "POST",
         mode: "cors",
         credentials: "include",
@@ -117,7 +115,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
     deleteProduct: builder.mutation({
       query: (data: ProductTS) => ({
-        url: `${process.env.REACT_APP_PRODUCT_POINT!}/deleteProduct/${data.id}`,
+        url: `${PRODUCT_END_POINT}/deleteProduct/${data.id}`,
         method: "DELETE",
         mode: "cors",
         headers: {

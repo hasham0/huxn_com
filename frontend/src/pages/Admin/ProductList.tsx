@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -8,13 +8,13 @@ import {
 import { useAllCategoriesQuery } from "../../redux/api/categoryApi";
 import { ProductTS } from "../../types";
 import AdminMenu from "./AdminMenu";
-type Props = {};
+
 type ImgTS = {
   originalFilename: string;
   secureUrl: string;
   imgUrl: string;
 };
-export default function ProductList({}: Props) {
+export default function ProductList() {
   const [product, setProduct] = useState<ProductTS>({
     name: "",
     image: "",
@@ -47,32 +47,44 @@ export default function ProductList({}: Props) {
   const [uploadProductImage] = useUploadProductImageMutation();
   const [addProduct] = useAddNewProductMutation();
   const { data: categoriesData } = useAllCategoriesQuery();
+  console.log(
+    " ------------------------------------------------------------------------"
+  );
+
+  useEffect(() => {
+    if (!categoriesData) {
+      return;
+    }
+  }, [categoriesData]);
 
   const uploadFileHandler = async (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     const file = event.target.files?.[0];
 
-    if (file) {
-      try {
-        const imgForm = new FormData();
-        imgForm.append("image", file);
-        const response = await uploadProductImage(imgForm).unwrap();
-        console.log("🚀 ~ uploadFileHandler ~ response:", response);
-        setProduct({
-          ...product,
-          image: response.imageUrl.secureUrl,
-        });
-        setImgUrl(response.imageUrl);
-        toast.success(response.message);
-      } catch (error) {
-        toast.error("Image upload failed");
-      }
+    if (!file) {
+      return;
+    }
+    try {
+      const imgForm = new FormData();
+      imgForm.append("image", file);
+      const response = await uploadProductImage(imgForm).unwrap();
+      setProduct({
+        ...product,
+        image: response.imageUrl.secureUrl,
+      });
+      setImgUrl(response.imageUrl);
+      toast.success(response.message);
+    } catch (error) {
+      toast.error("Image upload failed");
     }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
-      console.log(product);
+      if (!product) {
+        return;
+      }
       const data = await addProduct(product).unwrap();
       toast.success(data.message);
       navigate("/admin/products");

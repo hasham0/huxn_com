@@ -43,6 +43,7 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/upload", uploadRoutes);
 
+// set public folder path
 const __dirname = path.resolve();
 app.use(
   "./public/temp",
