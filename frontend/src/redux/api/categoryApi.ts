@@ -1,4 +1,4 @@
-import { CategoryTS } from "../../types";
+import { CategoryTS } from "@/types";
 import { CATEGORY_END_POINT } from "../constants";
 import { apiSlice } from "./apiSlice";
 
@@ -19,6 +19,7 @@ export const categoryApi = apiSlice.injectEndpoints({
         providesTags: ["Category"],
       }
     ),
+
     createCategory: builder.mutation({
       query: (data: { name: string }) => ({
         url: `${CATEGORY_END_POINT}/newCategoryItem`,
@@ -30,6 +31,7 @@ export const categoryApi = apiSlice.injectEndpoints({
         body: JSON.stringify({ name: data.name }),
       }),
     }),
+
     categoryByID: builder.query({
       query: (data: { _id: string }) => ({
         url: `${CATEGORY_END_POINT}/onlyCategory/${data._id}`,
@@ -40,6 +42,7 @@ export const categoryApi = apiSlice.injectEndpoints({
         },
       }),
     }),
+
     updateCategory: builder.mutation({
       query: (data: { _id: string; name: string }) => ({
         url: `${CATEGORY_END_POINT}/updateCategoryItem/${data._id}`,
@@ -51,6 +54,7 @@ export const categoryApi = apiSlice.injectEndpoints({
         body: JSON.stringify({ newCategoryName: data.name }),
       }),
     }),
+
     deleteCategory: builder.mutation({
       query: (data: { _id: string }) => ({
         url: `${CATEGORY_END_POINT}/deleteCategoryItem/${data._id}`,

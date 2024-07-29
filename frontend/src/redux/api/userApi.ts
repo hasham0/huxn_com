@@ -15,6 +15,7 @@ export const userApi = apiSlice.injectEndpoints({
         body: JSON.stringify(data),
       }),
     }),
+
     userProfile: builder.query({
       query: () => ({
         url: `${USER_END_POINT}/auth/profile`,
@@ -26,6 +27,7 @@ export const userApi = apiSlice.injectEndpoints({
         },
       }),
     }),
+
     updateProfile: builder.mutation({
       query: (data: UserProfileTS) => ({
         url: `${USER_END_POINT}/auth/updateProfile`,
@@ -37,6 +39,7 @@ export const userApi = apiSlice.injectEndpoints({
         body: JSON.stringify(data),
       }),
     }),
+
     login: builder.mutation({
       query: (data: LoginTS) => ({
         url: `${USER_END_POINT}/auth/loginUser`,
@@ -48,6 +51,7 @@ export const userApi = apiSlice.injectEndpoints({
         body: JSON.stringify(data),
       }),
     }),
+
     logout: builder.mutation({
       query: () => ({
         url: `${USER_END_POINT}/auth/logoutUser`,
@@ -59,6 +63,7 @@ export const userApi = apiSlice.injectEndpoints({
         credentials: "include",
       }),
     }),
+
     userDelete: builder.mutation({
       query: () => ({
         url: `${USER_END_POINT}/auth/deleteUser`,
@@ -70,6 +75,7 @@ export const userApi = apiSlice.injectEndpoints({
         },
       }),
     }),
+
     allUsers: builder.query({
       query: () => ({
         url: `${USER_END_POINT}/allUsers`,
@@ -83,6 +89,7 @@ export const userApi = apiSlice.injectEndpoints({
       providesTags: ["User"],
       keepUnusedDataFor: 5,
     }),
+
     getUserProfileBYID: builder.query({
       query: (userId) => ({
         url: `${USER_END_POINT}/userDetails/${userId}`,
@@ -94,6 +101,7 @@ export const userApi = apiSlice.injectEndpoints({
         },
       }),
     }),
+
     updateProfileByID: builder.mutation({
       query: (data: { _id: string; username: string; email: string }) => ({
         url: `${USER_END_POINT}/updateProfile/${data._id}`,
@@ -106,6 +114,7 @@ export const userApi = apiSlice.injectEndpoints({
         body: JSON.stringify({ username: data.username, email: data.email }),
       }),
     }),
+
     updateRoleByID: builder.mutation({
       query: (data: { _id: string; isAdmin: Boolean }) => ({
         url: `${USER_END_POINT}/updateRole/${data._id}`,
@@ -118,6 +127,7 @@ export const userApi = apiSlice.injectEndpoints({
         body: JSON.stringify({ isAdmin: data.isAdmin }),
       }),
     }),
+
     deleteUserBYID: builder.mutation({
       query: (userId) => ({
         url: `${USER_END_POINT}/userDelete/${userId}`,

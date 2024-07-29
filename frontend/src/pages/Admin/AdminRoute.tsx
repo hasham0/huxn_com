@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { RootState, useAppSelector } from "../../redux/store/store";
+import { RootState, useAppSelector } from "@/redux/store/store";
 type Props = {};
 
 export default function AdminRoute({}: Props) {

@@ -60,6 +60,10 @@ const getProductByID = asyncHandler(async (request, response) => {
 //note: GET Top Products_
 const topProducts = asyncHandler(async (request, response) => {
   const products = await Product.find({}).sort({ rating: -1 }).limit(4);
+
+  if (!products) {
+    throw new Error("product not found");
+  }
   response.status(200).json({
     data: products,
   });
@@ -68,6 +72,11 @@ const topProducts = asyncHandler(async (request, response) => {
 //note: GET New Products_
 const newProducts = asyncHandler(async (request, response) => {
   const products = await Product.find({}).sort({ _id: -1 }).limit(5);
+
+  if (!products) {
+    throw new Error("product not found");
+  }
+
   response.status(200).json({
     data: products,
   });
@@ -142,9 +151,11 @@ const addNewProduct = asyncHandler(async (request, response) => {
   if (check.some((item) => item?.trim() === "")) {
     throw new Error("please fill all fields");
   }
+
   price = Number(price);
   quantity = Number(quantity);
   stock = Number(stock);
+
   /* check product if existed */
   const isProductExists = await Product.findOne({
     name: name,

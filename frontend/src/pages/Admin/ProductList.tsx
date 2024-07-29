@@ -4,16 +4,11 @@ import { toast } from "react-toastify";
 import {
   useAddNewProductMutation,
   useUploadProductImageMutation,
-} from "../../redux/api/productApi";
-import { useAllCategoriesQuery } from "../../redux/api/categoryApi";
-import { ProductTS } from "../../types";
+} from "@/redux/api/productApi";
+import { useAllCategoriesQuery } from "@/redux/api/categoryApi";
+import { ImgTS, ProductTS } from "@/types";
 import AdminMenu from "./AdminMenu";
 
-type ImgTS = {
-  originalFilename: string;
-  secureUrl: string;
-  imgUrl: string;
-};
 export default function ProductList() {
   const [product, setProduct] = useState<ProductTS>({
     name: "",
@@ -47,9 +42,6 @@ export default function ProductList() {
   const [uploadProductImage] = useUploadProductImageMutation();
   const [addProduct] = useAddNewProductMutation();
   const { data: categoriesData } = useAllCategoriesQuery();
-  console.log(
-    " ------------------------------------------------------------------------"
-  );
 
   useEffect(() => {
     if (!categoriesData) {

@@ -32,6 +32,12 @@ type ProductTS = {
   image: string;
   stock: number;
 };
+
+type ImgTS = {
+  originalFilename: string;
+  secureUrl: string;
+  imgUrl: string;
+};
 export type {
   RegisterTS,
   LoginTS,
@@ -39,4 +45,5 @@ export type {
   CategoryTS,
   ProductTS,
   CategoryResponceTS,
+  ImgTS,
 };

@@ -1,4 +1,4 @@
-import { ProductTS } from "../../types";
+import { ProductTS } from "@/types";
 import { PRODUCT_END_POINT, UPLOAD_END_POINT } from "../constants";
 import { apiSlice } from "./apiSlice";
 
@@ -17,6 +17,7 @@ export const productApi = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
       providesTags: ["Product"],
     }),
+
     getProductByID: builder.query<ProductTS, string>({
       query: (productID: string) => ({
         url: `${PRODUCT_END_POINT}}/singleProduct/${productID}`,
@@ -26,7 +27,9 @@ export const productApi = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
+      keepUnusedDataFor: 5,
     }),
+
     getLimitedProducts: builder.query<ProductTS[], void>({
       query: () => ({
         url: `${PRODUCT_END_POINT}/limitedProducts`,
@@ -37,6 +40,7 @@ export const productApi = apiSlice.injectEndpoints({
         },
       }),
     }),
+
     getTopProducts: builder.query<ProductTS[], void>({
       query: () => ({
         url: `${PRODUCT_END_POINT}/topProducts`,
@@ -46,7 +50,9 @@ export const productApi = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
+      keepUnusedDataFor: 5,
     }),
+
     getNewProduct: builder.query<ProductTS, void>({
       query: () => ({
         url: `${PRODUCT_END_POINT}/newProducts`,
@@ -56,7 +62,9 @@ export const productApi = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
+      keepUnusedDataFor: 5,
     }),
+
     productReview: builder.mutation({
       query: (data: {
         productID: string;
@@ -72,6 +80,7 @@ export const productApi = apiSlice.injectEndpoints({
         body: JSON.stringify({ rating: data.rating, comment: data.comment }),
       }),
     }),
+
     addNewProduct: builder.mutation({
       query: (data: ProductTS) => ({
         url: `${PRODUCT_END_POINT}/addNewProduct`,
@@ -92,7 +101,9 @@ export const productApi = apiSlice.injectEndpoints({
           stock: data.stock,
         }),
       }),
+      invalidatesTags: ["Product"],
     }),
+
     updateProduct: builder.mutation({
       query: (data: ProductTS) => ({
         url: `${PRODUCT_END_POINT}/updateProduct/${data.id}`,
@@ -104,6 +115,7 @@ export const productApi = apiSlice.injectEndpoints({
         body: JSON.stringify(data),
       }),
     }),
+
     uploadProductImage: builder.mutation({
       query: (data: FormData) => ({
         url: `${UPLOAD_END_POINT}`,
@@ -113,6 +125,7 @@ export const productApi = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
     deleteProduct: builder.mutation({
       query: (data: ProductTS) => ({
         url: `${PRODUCT_END_POINT}/deleteProduct/${data.id}`,

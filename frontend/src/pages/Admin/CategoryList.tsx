@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import {
   useAllCategoriesQuery,
@@ -6,14 +6,13 @@ import {
   // useCategoryByIDQuery,
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
-} from "../../redux/api/categoryApi";
-import CategoryForm from "../../components/CategoryForm";
-import { CategoryTS } from "../../types";
-import Model from "../../components/Model";
+} from "@/redux/api/categoryApi";
+import CategoryForm from "@/components/CategoryForm";
+import { CategoryTS } from "@/types";
+import Model from "@/components/Model";
+import AdminMenu from "./AdminMenu";
 
-type Props = {};
-
-export default function CategoryList({}: Props) {
+export default function CategoryList() {
   const [item, setItem] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<CategoryTS | null>();
 
@@ -102,7 +101,7 @@ export default function CategoryList({}: Props) {
   return (
     <div>
       <div className="ml-[10rem] flex flex-col md:flex-row">
-        {/* <AdminMenu /> */}
+        <AdminMenu />
         <div className="md:w-3/4 p-3">
           <div className="h-12">Manage Categories</div>
           <CategoryForm

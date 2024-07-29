@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { userTemTS } from "../../../lib/zod";
+import { userTemTS } from "@/lib/zod";
 
 interface InitialState {
   userInfo: userTemTS | null;

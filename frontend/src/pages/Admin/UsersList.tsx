@@ -1,14 +1,14 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
 import { MdDoNotDisturb } from "react-icons/md";
-import Loader from "../../components/Loader";
-import Message from "../../components/Message";
+import Loader from "@/components/Loader";
+import Message from "@/components/Message";
 import {
   useAllUsersQuery,
   useDeleteUserBYIDMutation,
   useUpdateProfileByIDMutation,
-} from "../../redux/api/userApi";
-import { UserProfileTS } from "../../types";
+} from "@/redux/api/userApi";
+import { UserProfileTS } from "@/types";
 
 type Props = {};
 
