@@ -18,9 +18,14 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Product"],
     }),
 
-    getProductByID: builder.query<ProductTS, string>({
+    getProductByID: builder.query<
+      {
+        data: ProductTS;
+      },
+      string
+    >({
       query: (productID: string) => ({
-        url: `${PRODUCT_END_POINT}}/singleProduct/${productID}`,
+        url: `${PRODUCT_END_POINT}/singleProduct/${productID}`,
         method: "GET",
         mode: "cors",
         headers: {
@@ -28,9 +33,19 @@ export const productApi = apiSlice.injectEndpoints({
         },
       }),
       keepUnusedDataFor: 5,
+      providesTags: ["Product"],
     }),
 
-    getLimitedProducts: builder.query<ProductTS[], void>({
+    getLimitedProducts: builder.query<
+      {
+        message: string;
+        data: ProductTS[];
+        hasMore: boolean;
+        page: number;
+        pages: number;
+      },
+      void
+    >({
       query: () => ({
         url: `${PRODUCT_END_POINT}/limitedProducts`,
         method: "GET",
@@ -106,7 +121,7 @@ export const productApi = apiSlice.injectEndpoints({
 
     updateProduct: builder.mutation({
       query: (data: ProductTS) => ({
-        url: `${PRODUCT_END_POINT}/updateProduct/${data.id}`,
+        url: `${PRODUCT_END_POINT}/updateProduct/${data._id}`,
         method: "PATCH",
         mode: "cors",
         headers: {
@@ -128,7 +143,7 @@ export const productApi = apiSlice.injectEndpoints({
 
     deleteProduct: builder.mutation({
       query: (data: ProductTS) => ({
-        url: `${PRODUCT_END_POINT}/deleteProduct/${data.id}`,
+        url: `${PRODUCT_END_POINT}/deleteProduct/${data._id}`,
         method: "DELETE",
         mode: "cors",
         headers: {

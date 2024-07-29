@@ -26,4 +26,23 @@ const uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
-export default uploadOnCloudinary;
+const updateOnCloudinary = async (localFilePath) => {
+  try {
+    if (!localFilePath) {
+      throw {
+        message: "local file path not found",
+      };
+    }
+    const uploadResult = await cloudinary.uploader.upload(localFilePath, {
+      resource_type: "auto",
+      folder: "huxn-web-ecommerce",
+    });
+    fs.unlinkSync(localFilePath); //! remove local save file when success to upload
+    return uploadResult;
+  } catch (error) {
+    fs.unlinkSync(localFilePath); //! remove local save file when fail to upload
+    return null;
+  }
+};
+
+export { uploadOnCloudinary, updateOnCloudinary };

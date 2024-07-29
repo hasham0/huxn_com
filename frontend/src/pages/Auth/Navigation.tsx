@@ -52,7 +52,7 @@ export default function Navigation() {
         style={{ zIndex: 9999 }}
         className={`${
           showSidebar ? "hidden" : "flex"
-        } xl:flex lg:flex md:hidden sm:hidden flex-col justify-between p-4 text-white bg-[#000] w-[4%] hover:w-[15%] h-[100vh] fixed`}
+        } fixed h-[100vh] w-[4%] flex-col justify-between bg-[#000] p-4 text-white hover:w-[15%] sm:hidden md:hidden lg:flex xl:flex`}
         id="navigation-container"
       >
         {/* <!-- nav items --> */}
@@ -60,30 +60,30 @@ export default function Navigation() {
           {/* <!-- Home --> */}
           <Link
             to="/"
-            className="flex items-center transition-transform transform hover:translate-x-2"
+            className="flex transform items-center transition-transform hover:translate-x-2"
           >
             <AiOutlineHome className="mr-2 mt-[3rem]" size={26} />
-            <span className="hidden nav-item-name mt-[3rem] uppercase">
+            <span className="nav-item-name mt-[3rem] hidden uppercase">
               home
             </span>
           </Link>
           {/* <!-- Shop --> */}
           <Link
             to="/shop"
-            className="flex items-center transition-transform transform hover:translate-x-2"
+            className="flex transform items-center transition-transform hover:translate-x-2"
           >
             <AiOutlineShoppingCart className="mr-2 mt-[3rem]" size={26} />
-            <span className="hidden nav-item-name mt-[3rem] uppercase">
+            <span className="nav-item-name mt-[3rem] hidden uppercase">
               shop
             </span>
           </Link>
           {/* <!-- Favorite --> */}
           <Link
             to="/favorite"
-            className="flex items-center transition-transform transform hover:translate-x-2"
+            className="flex transform items-center transition-transform hover:translate-x-2"
           >
             <FaHeart className="mr-2 mt-[3rem]" size={26} />
-            <span className="hidden nav-item-name mt-[3rem] uppercase">
+            <span className="nav-item-name mt-[3rem] hidden uppercase">
               favorite
             </span>
           </Link>
@@ -94,7 +94,7 @@ export default function Navigation() {
           <div className="relative">
             <button
               onClick={toggleDropdown}
-              className="flex text-gray-800f items-cente focus:outline-none"
+              className="text-gray-800f items-cente flex focus:outline-none"
             >
               {userInfo && (
                 <span className="text-white">{userInfo?.username}</span>
@@ -102,8 +102,8 @@ export default function Navigation() {
               {userInfo && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className={`h-4 w-4 ml-1 ${
-                    dropdownOpen ? "transform rotate-180" : ""
+                  className={`ml-1 h-4 w-4 ${
+                    dropdownOpen ? "rotate-180 transform" : ""
                   }`}
                   fill="none"
                   viewBox="0 0 24 24"
@@ -120,7 +120,7 @@ export default function Navigation() {
             </button>
             {dropdownOpen && userInfo && (
               <ul
-                className={`absolute right-0 mt-2 mr-14 space-y-2 bg-white text-gray-600 ${
+                className={`absolute right-0 mr-14 mt-2 space-y-2 bg-white text-gray-600 ${
                   !userInfo.isAdmin ? "-top-20" : "-top-80"
                 } `}
               >
@@ -136,7 +136,7 @@ export default function Navigation() {
                     </li>
                     <li>
                       <Link
-                        to="/admin/productlist"
+                        to="/admin/allproductslist"
                         className="block px-4 py-2 hover:bg-gray-100"
                       >
                         Products
@@ -196,10 +196,10 @@ export default function Navigation() {
               <li>
                 <Link
                   to="/login"
-                  className="flex items-center transition-transform transform hover:translate-x-2"
+                  className="flex transform items-center transition-transform hover:translate-x-2"
                 >
                   <AiOutlineLogin className="mr-2 mt-[3rem]" size={26} />
-                  <span className="hidden nav-item-name mt-[3rem] capitalize">
+                  <span className="nav-item-name mt-[3rem] hidden capitalize">
                     login
                   </span>
                 </Link>
@@ -207,10 +207,10 @@ export default function Navigation() {
               <li>
                 <Link
                   to="/register"
-                  className="flex items-center transition-transform transform hover:translate-x-2"
+                  className="flex transform items-center transition-transform hover:translate-x-2"
                 >
                   <AiOutlineUserAdd className="mr-2 mt-[3rem]" size={26} />
-                  <span className="hidden nav-item-name mt-[3rem] capitalize">
+                  <span className="nav-item-name mt-[3rem] hidden capitalize">
                     register
                   </span>
                 </Link>

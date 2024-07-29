@@ -6,10 +6,10 @@ import {
   // useCategoryByIDQuery,
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
-} from "@/redux/api/categoryApi";
-import CategoryForm from "@/components/CategoryForm";
-import { CategoryTS } from "@/types";
-import Model from "@/components/Model";
+} from "../../redux/api/categoryApi";
+import CategoryForm from "../../components/CategoryForm";
+import { CategoryTS } from "../../types";
+import Model from "../../components/Model";
 import AdminMenu from "./AdminMenu";
 
 export default function CategoryList() {

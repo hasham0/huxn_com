@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { upload } from "../utils/multer.js";
-import uploadImageMethod from "../utils/uplodImage.js";
+import {
+  uploadImageMethod,
+  updateProductImageMethod,
+} from "../utils/uplodImage.js";
 import {
   isUserAuthenticated,
   isUserAuthorizeAdmin,
@@ -16,6 +19,15 @@ router
     isUserAuthorizeAdmin,
     upload.single("image"),
     uploadImageMethod
+  );
+
+router
+  .route("/updateProductImage")
+  .post(
+    isUserAuthenticated,
+    isUserAuthorizeAdmin,
+    upload.single("image"),
+    updateProductImageMethod
   );
 
 //! export route_

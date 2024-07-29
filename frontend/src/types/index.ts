@@ -22,7 +22,7 @@ type CategoryResponceTS = {
 };
 
 type ProductTS = {
-  id?: string;
+  _id?: string;
   name: string;
   description: string;
   price: number;
@@ -31,6 +31,7 @@ type ProductTS = {
   brand: string;
   image: string;
   stock: number;
+  createdAt?: Date;
 };
 
 type ImgTS = {

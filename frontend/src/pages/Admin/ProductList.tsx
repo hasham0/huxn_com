@@ -4,9 +4,9 @@ import { toast } from "react-toastify";
 import {
   useAddNewProductMutation,
   useUploadProductImageMutation,
-} from "@/redux/api/productApi";
-import { useAllCategoriesQuery } from "@/redux/api/categoryApi";
-import { ImgTS, ProductTS } from "@/types";
+} from "../../redux/api/productApi";
+import { useAllCategoriesQuery } from "../../redux/api/categoryApi";
+import { ImgTS, ProductTS } from "../../types/";
 import AdminMenu from "./AdminMenu";
 
 export default function ProductList() {
@@ -79,7 +79,7 @@ export default function ProductList() {
       }
       const data = await addProduct(product).unwrap();
       toast.success(data.message);
-      navigate("/admin/products");
+      // navigate("/admin/products");
       setImgUrl({
         imgUrl: "",
         originalFilename: "",
