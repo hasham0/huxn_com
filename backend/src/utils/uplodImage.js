@@ -31,25 +31,33 @@ const uploadImageMethod = asyncHandler(async (request, response, next) => {
 const updateProductImageMethod = asyncHandler(
   async (request, response, next) => {
     try {
-      const userID = request.userId;
+      const { prodID } = request.params;
       const imgPath = request.file.path;
       if (!imgPath) {
         throw new Error("error while uploading image");
       }
-      const removeimage = await Product.findByIdAndUpdate();
+      const removeimage = await Product.findOne({ _id: prodID });
+      const localPath = `${removeimage.image
+        .split("/")
+        .at(-2)}/${removeimage.image.split("/").at(-1)}`.split(".")[0];
 
-      const cloudImg = await uploadOnCloudinary(imgPath);
-      if (!cloudImg.url) {
-        throw new Error("error while updating avatar");
-      }
-      const imgObj = {
-        originalFilename: cloudImg.original_filename,
-        secureUrl: cloudImg.secure_url,
-        imgUrl: cloudImg.url,
-      };
+      const newCloudImg = await updateOnCloudinary(localPath, imgPath);
+      await Product.findByIdAndUpdate(
+        {
+          _id: prodID,
+        },
+        {
+          $set: {
+            image: newCloudImg.secure_url,
+          },
+        },
+        {
+          new: true,
+        }
+      );
       response.status(200).send({
-        message: "Image uploaded successfully",
-        imageUrl: imgObj,
+        newImgUrl: newCloudImg.secure_url,
+        message: "Image updated successfully",
       });
     } catch (error) {
       next(error);

@@ -183,17 +183,30 @@ const addNewProduct = asyncHandler(async (request, response) => {
 // note: update products:
 const updateProductDetailsByID = asyncHandler(async (request, response) => {
   const { _id: productID } = request.params;
-  const { name, description, price, category, quantity, brand, image } =
-    request.fields;
+  const { name, description, price, category, quantity, brand, image, stock } =
+    request.body;
+
+  const check = [
+    name,
+    image,
+    brand,
+    quantity,
+    category,
+    description,
+    price,
+    stock,
+  ];
 
   /* check validation */
-  if (
-    [name, description, price, category, quantity, brand, image].some(
-      (item) => item?.trim() === ""
-    )
-  ) {
+  if (check.some((item) => typeof item === "string" && item.trim() === "")) {
     throw new Error("please fill all fields");
   }
+
+  /* Convert numeric fields to numbers */
+  const numericPrice = Number(price);
+  const numericQuantity = Number(quantity);
+  const numericStock = Number(stock);
+
   /* check product if existed */
   const isProductExists = await Product.findOne({ _id: productID });
   if (!isProductExists) {
@@ -204,14 +217,21 @@ const updateProductDetailsByID = asyncHandler(async (request, response) => {
     { _id: productID },
     {
       $set: {
-        ...request.fields,
+        name,
+        image,
+        brand,
+        quantity: numericQuantity,
+        category,
+        description,
+        price: numericPrice,
+        stock: numericStock,
       },
     },
     { new: true }
   );
 
   response.status(200).json({
-    message: "new product added successfully",
+    message: "Product updated successfully",
     data: updateProduct,
   });
 });

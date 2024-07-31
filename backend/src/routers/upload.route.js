@@ -22,8 +22,8 @@ router
   );
 
 router
-  .route("/updateProductImage")
-  .post(
+  .route("/updateProductImage/:prodID")
+  .patch(
     isUserAuthenticated,
     isUserAuthorizeAdmin,
     upload.single("image"),

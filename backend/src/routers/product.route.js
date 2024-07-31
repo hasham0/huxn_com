@@ -42,12 +42,7 @@ router
 
 router
   .route("/updateProduct/:_id")
-  .patch(
-    isUserAuthenticated,
-    isUserAuthorizeAdmin,
-    formidable(),
-    updateProductDetailsByID
-  );
+  .put(isUserAuthenticated, isUserAuthorizeAdmin, updateProductDetailsByID);
 
 router
   .route("/deleteProduct/:_id")

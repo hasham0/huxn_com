@@ -51,7 +51,7 @@ export default function Login() {
       dispatched(
         setCredientials({
           data: userData.data,
-        })
+        }),
       );
       toast.success(res.message);
       navigate(redirect);
@@ -62,7 +62,7 @@ export default function Login() {
 
   return (
     <div>
-      <section className="pl-[10rem] flex flex-wrap">
+      <section className="flex flex-wrap pl-[10rem]">
         <div className="mr-[4rem] mt-[5rem]">
           <h1 className="mb-4 text-2xl font-semibold">Sign In</h1>
 
@@ -77,7 +77,7 @@ export default function Login() {
               <input
                 type="email"
                 id="email"
-                className="w-full p-2 mt-1 border rounded"
+                className="mt-1 w-full rounded border p-2"
                 name="email"
                 placeholder="Enter email"
                 value={userCredientials.email}
@@ -96,7 +96,7 @@ export default function Login() {
                 type="password"
                 id="password"
                 name="password"
-                className="w-full p-2 mt-1 border rounded"
+                className="mt-1 w-full rounded border p-2"
                 placeholder="Enter password"
                 value={userCredientials.password}
                 onChange={changedInputsHandler}
@@ -106,7 +106,7 @@ export default function Login() {
             <button
               disabled={isLoading}
               type="submit"
-              className="bg-pink-500 text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
+              className="my-[1rem] cursor-pointer rounded bg-pink-500 px-4 py-2 text-white"
             >
               {isLoading ? "Signing In..." : "Sign In"}
             </button>
@@ -129,7 +129,7 @@ export default function Login() {
         <img
           src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
           alt=""
-          className="h-[65rem] w-[59%] xl:block md:hidden sm:hidden rounded-lg"
+          className="h-[65rem] w-[59%] rounded-lg sm:hidden md:hidden xl:block"
         />
       </section>
     </div>

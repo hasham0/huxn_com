@@ -4,11 +4,17 @@ import moment from "moment";
 import AdminMenu from "./AdminMenu";
 import { useGetLimitedProductsQuery } from "../../redux/api/productApi";
 import Loader from "../../components/Loader";
-import { ProductTS } from "@/types";
+import { ProductTS } from "../../types";
+
 type Props = {};
 
 export default function AllProductsList({}: Props) {
-  const { data: products, isLoading, isError } = useGetLimitedProductsQuery();
+  const {
+    data: products,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetLimitedProductsQuery();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +22,10 @@ export default function AllProductsList({}: Props) {
       return;
     }
   }, [products]);
+
+  useEffect(() => {
+    refetch();
+  }, [products, refetch]);
 
   if (isLoading) {
     return <Loader />;

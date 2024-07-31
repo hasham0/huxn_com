@@ -119,15 +119,18 @@ export const productApi = apiSlice.injectEndpoints({
       invalidatesTags: ["Product"],
     }),
 
-    updateProduct: builder.mutation({
-      query: (data: ProductTS) => ({
-        url: `${PRODUCT_END_POINT}/updateProduct/${data._id}`,
-        method: "PATCH",
+    updateProduct: builder.mutation<
+      { data: ProductTS; message: string },
+      { _id: string; oldData: ProductTS }
+    >({
+      query: ({ _id, oldData }) => ({
+        url: `${PRODUCT_END_POINT}/updateProduct/${_id}`,
+        method: "PUT",
         mode: "cors",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(oldData),
       }),
     }),
 
@@ -141,9 +144,25 @@ export const productApi = apiSlice.injectEndpoints({
       }),
     }),
 
-    deleteProduct: builder.mutation({
-      query: (data: ProductTS) => ({
-        url: `${PRODUCT_END_POINT}/deleteProduct/${data._id}`,
+    updateProductImage: builder.mutation<
+      {
+        newImgUrl: string;
+        message: string;
+      },
+      { id: string; image: FormData }
+    >({
+      query: (data) => ({
+        url: `${UPLOAD_END_POINT}/updateProductImage/${data.id}`,
+        method: "PATCH",
+        mode: "cors",
+        credentials: "include",
+        body: data.image,
+      }),
+    }),
+
+    deleteProduct: builder.mutation<{ message: string }, { _id: string }>({
+      query: ({ _id }) => ({
+        url: `${PRODUCT_END_POINT}/deleteProduct/${_id}`,
         method: "DELETE",
         mode: "cors",
         headers: {
@@ -163,6 +182,7 @@ export const {
   useAddNewProductMutation,
   useDeleteProductMutation,
   useUpdateProductMutation,
+  useUpdateProductImageMutation,
   useProductReviewMutation,
   useUploadProductImageMutation,
 } = productApi;
