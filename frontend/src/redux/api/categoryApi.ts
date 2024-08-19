@@ -1,4 +1,4 @@
-import { CategoryTS } from "@/types";
+import { CategoryTS } from "../../types";
 import { CATEGORY_END_POINT } from "../constants";
 import { apiSlice } from "./apiSlice";
 
@@ -17,7 +17,7 @@ export const categoryApi = apiSlice.injectEndpoints({
         }),
         keepUnusedDataFor: 5,
         providesTags: ["Category"],
-      }
+      },
     ),
 
     createCategory: builder.mutation({

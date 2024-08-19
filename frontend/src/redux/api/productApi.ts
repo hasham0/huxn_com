@@ -1,10 +1,10 @@
-import { ProductTS } from "@/types";
+import { ProductTS } from "../../types";
 import { PRODUCT_END_POINT, UPLOAD_END_POINT } from "../constants";
 import { apiSlice } from "./apiSlice";
 
 export const productApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getProducts: builder.query<ProductTS[], { keyword: string }>({
+    getProducts: builder.query<{ data: ProductTS[] }, { keyword: string }>({
       query: ({ keyword }) => ({
         url: `${PRODUCT_END_POINT}/allProducts`,
         method: "GET",
@@ -56,7 +56,7 @@ export const productApi = apiSlice.injectEndpoints({
       }),
     }),
 
-    getTopProducts: builder.query<ProductTS[], void>({
+    getTopProducts: builder.query<{ data: ProductTS[] }, void>({
       query: () => ({
         url: `${PRODUCT_END_POINT}/topProducts`,
         method: "GET",

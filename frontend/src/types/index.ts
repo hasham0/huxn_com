@@ -30,7 +30,9 @@ type ProductTS = {
   quantity: number;
   brand: string;
   image: string;
+  numReviews?: any;
   stock: number;
+  rating?: number;
   createdAt?: Date;
 };
 
