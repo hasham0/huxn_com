@@ -28,36 +28,36 @@ router.route("/registerUser").post(createUser);
 
 router.route("/auth/loginUser").post(loginUser);
 
-router.route("/auth/profile").get(isUserAuthenticated, userProfile);
+router.route("/auth/profile").get([isUserAuthenticated], userProfile);
 
-router.route("/auth/updateProfile").put(isUserAuthenticated, updateProfile);
+router.route("/auth/updateProfile").put([isUserAuthenticated], updateProfile);
 
-router.route("/auth/updatePassword").put(isUserAuthenticated, updatePassword);
+router.route("/auth/updatePassword").put([isUserAuthenticated], updatePassword);
 
-router.route("/auth/logoutUser").post(isUserAuthenticated, logoutUser);
+router.route("/auth/logoutUser").post([isUserAuthenticated], logoutUser);
 
-router.route("/auth/deleteUser").delete(isUserAuthenticated, deleteUser);
+router.route("/auth/deleteUser").delete([isUserAuthenticated], deleteUser);
 
 //note: admin routes and rights_
 router
   .route("/allUsers")
-  .get(isUserAuthenticated, isUserAuthorizeAdmin, allUsers);
+  .get([isUserAuthenticated, isUserAuthorizeAdmin], allUsers);
 
 router
   .route("/userDetails/:_id")
-  .get(isUserAuthenticated, isUserAuthorizeAdmin, getUserByID);
+  .get([isUserAuthenticated, isUserAuthorizeAdmin], getUserByID);
 
 router
   .route("/updateProfile/:_id")
-  .put(isUserAuthenticated, isUserAuthorizeAdmin, updateUserProfileByID);
+  .put([isUserAuthenticated, isUserAuthorizeAdmin], updateUserProfileByID);
 
 router
   .route("/updateRole/:_id")
-  .put(isUserAuthenticated, isUserAuthorizeAdmin, updateUserRoleByID);
+  .put([isUserAuthenticated, isUserAuthorizeAdmin], updateUserRoleByID);
 
 router
   .route("/userDelete/:_id")
-  .delete(isUserAuthenticated, isUserAuthorizeAdmin, deleteUserByID);
+  .delete([isUserAuthenticated, isUserAuthorizeAdmin], deleteUserByID);
 
 //! export route_
 export default router;

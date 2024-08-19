@@ -18,18 +18,18 @@ router.route("/allCategories").get(allCategories);
 
 router
   .route("/onlyCategory/:_id")
-  .get(isUserAuthenticated, isUserAuthorizeAdmin, categoryByID);
+  .get([isUserAuthenticated, isUserAuthorizeAdmin], categoryByID);
 
 router
   .route("/newCategoryItem")
-  .post(isUserAuthenticated, isUserAuthorizeAdmin, createCategory);
+  .post([isUserAuthenticated, isUserAuthorizeAdmin], createCategory);
 
 router
   .route("/updateCategoryItem/:_id")
-  .put(isUserAuthenticated, isUserAuthorizeAdmin, updateCategoryByID);
+  .put([isUserAuthenticated, isUserAuthorizeAdmin], updateCategoryByID);
 
 router
   .route("/deleteCategoryItem/:_id")
-  .delete(isUserAuthenticated, isUserAuthorizeAdmin, deleteCategoryByID);
+  .delete([isUserAuthenticated, isUserAuthorizeAdmin], deleteCategoryByID);
 
 export default router;
