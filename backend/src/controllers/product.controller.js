@@ -1,5 +1,6 @@
 import asyncHandler from "../helpers/asyncHanlder.js";
 import Product from "../models/product.model.js";
+import { v2 as cloudinary } from "cloudinary";
 
 // note: get limited products:
 const fetchLimitedProducts = asyncHandler(async (request, response) => {
@@ -243,7 +244,13 @@ const deleteProductByID = asyncHandler(async (request, response) => {
   if (!isProductExist) {
     throw new Error("product not found");
   }
+  const oldPublicId = `${isProductExist.image
+    .split("/")
+    .at(-2)}/${isProductExist.image.split("/").at(-1)}`.split(".")[0];
+
+  await cloudinary.uploader.destroy(oldPublicId);
   await Product.findByIdAndDelete({ _id: productID });
+
   response.status(200).json({
     message: "product deleted successfully",
   });

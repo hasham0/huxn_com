@@ -10,7 +10,6 @@ const allCategories = asyncHandler(async (request, response) => {
   response
     .status(200)
     .json({ message: "all category", data: getAllCategories });
-  // response.status(200).json({ data: "Working" });
 });
 
 // note: get categories by id:

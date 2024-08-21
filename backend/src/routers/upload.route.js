@@ -15,14 +15,14 @@ const router = Router();
 router
   .route("/")
   .post(
-    [isUserAuthenticated, , isUserAuthorizeAdmin, upload.single("image")],
+    [isUserAuthenticated, isUserAuthorizeAdmin, upload.single("image")],
     uploadImageMethod
   );
 
 router
   .route("/updateProductImage/:prodID")
   .patch(
-    [isUserAuthenticated, , isUserAuthorizeAdmin, upload.single("image")],
+    [isUserAuthenticated, isUserAuthorizeAdmin, upload.single("image")],
     updateProductImageMethod
   );
 

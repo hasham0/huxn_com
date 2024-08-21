@@ -14,7 +14,7 @@ import categoryRoutes from "./routers/category.route.js";
 import productRoutes from "./routers/product.route.js";
 import uploadRoutes from "./routers/upload.route.js";
 
-// set variable
+/*  set variable */
 const app = express();
 
 //note: set dotenv config_
@@ -22,7 +22,7 @@ dotenv.config({
   path: "../.env",
 });
 
-// set middlewares
+/* set middlewares */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -37,20 +37,20 @@ app.use(
   })
 );
 
-// set routes
-app.use("/api/users", userRoutes);
-app.use("/api/category", categoryRoutes);
-app.use("/api/product", productRoutes);
-app.use("/api/upload", uploadRoutes);
-
-// set public folder path
+/* set public folder path */
 const __dirname = path.resolve();
 app.use(
   "./public/temp",
   express.static(path.join(__dirname + "./public/temp"))
 );
 
-// set global level error handling middlwere
+/* set routes */
+app.use("/api/users", userRoutes);
+app.use("/api/category", categoryRoutes);
+app.use("/api/product", productRoutes);
+app.use("/api/upload", uploadRoutes);
+
+/* set global level error handling middlwere */
 app.use(errorMiddleware);
 
 /* database connection and app listen to port */
