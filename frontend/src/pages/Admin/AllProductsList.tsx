@@ -21,18 +21,25 @@ export default function AllProductsList({}: Props) {
     if (!products) {
       return;
     }
-  }, [products]);
-
-  useEffect(() => {
     refetch();
   }, [products, refetch]);
 
   if (isLoading) {
-    return <Loader />;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Loader />;
+      </div>
+    );
   }
+
   if (isError) {
-    return <div>Error while loading products....</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div>Error while loading products....</div>;
+      </div>
+    );
   }
+
   return (
     <>
       <div className="container mx-[9rem]">

@@ -12,6 +12,7 @@ import { useAllCategoriesQuery } from "../../redux/api/categoryApi";
 import { ProductTS } from "../../types";
 import AdminMenu from "./AdminMenu";
 import { toast } from "react-toastify";
+import Loader from "../../components/Loader";
 
 type Props = {};
 
@@ -19,7 +20,12 @@ export default function UpdateProduct({}: Props) {
   const navigate = useNavigate();
   const params = useParams<{ _id: string }>();
 
-  const { data: productData } = useGetProductByIDQuery(params._id!);
+  const {
+    data: productData,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetProductByIDQuery(params._id!);
 
   const [imageUrl, setImageUrl] = useState<string>("");
 
@@ -36,6 +42,7 @@ export default function UpdateProduct({}: Props) {
 
   useEffect(() => {
     if (productData && productData.data) {
+      refetch();
       setProduct({
         _id: productData.data._id || "",
         name: productData.data.name || "",
@@ -49,7 +56,7 @@ export default function UpdateProduct({}: Props) {
       });
       setImageUrl(productData.data.image);
     }
-  }, [productData]);
+  }, [productData, refetch]);
 
   const { data: categoriesData } = useAllCategoriesQuery();
   const [updateProductImage] = useUpdateProductImageMutation();
@@ -81,6 +88,10 @@ export default function UpdateProduct({}: Props) {
       }).unwrap();
       toast.success(data.message);
       setImageUrl(data.newImgUrl);
+      setProduct({
+        ...product,
+        image: data.newImgUrl,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -106,9 +117,7 @@ export default function UpdateProduct({}: Props) {
       });
       setImageUrl(response.data.image);
       toast.success(response.message);
-      setInterval(() => {
-        navigate("/admin/allproductslist"); // Redirect to the products list or another page
-      }, 1000);
+      navigate("/admin/allproductslist"); // Redirect to the products list or another page
     } catch (error) {
       toast.error("Failed to delete the product");
       console.log(
@@ -124,8 +133,6 @@ export default function UpdateProduct({}: Props) {
   const handleDelete = async (event: ReactMouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!(product && product?._id)) return;
-    console.log(product._id);
-
     try {
       const response = await deleteProduct({ _id: product._id }).unwrap();
       toast.success(response.message);
@@ -141,6 +148,22 @@ export default function UpdateProduct({}: Props) {
       );
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Loader />;
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div>Error while loading products....</div>;
+      </div>
+    );
+  }
 
   return (
     <div>

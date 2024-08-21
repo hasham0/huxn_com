@@ -31,7 +31,7 @@ export default function ProductList() {
   const changedInputsHandler = (
     event: ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    >,
   ) => {
     const { name, value } = event.target;
     setProduct({
@@ -79,7 +79,7 @@ export default function ProductList() {
       }
       const data = await addProduct(product).unwrap();
       toast.success(data.message);
-      // navigate("/admin/products");
+      navigate("/admin/allproductslist");
       setImgUrl({
         imgUrl: "",
         originalFilename: "",
@@ -102,10 +102,10 @@ export default function ProductList() {
   };
 
   return (
-    <div className="container xl:mx-[9rem] sm:mx-[0]">
+    <div className="container sm:mx-[0] xl:mx-[9rem]">
       <div className="flex flex-col md:flex-row">
         <AdminMenu />
-        <form onSubmit={handleSubmit} className="md:w-3/4 p-3">
+        <form onSubmit={handleSubmit} className="p-3 md:w-3/4">
           <div className="h-12">Create Product</div>
 
           {product.image && imgUrl && (
@@ -113,13 +113,13 @@ export default function ProductList() {
               <img
                 src={imgUrl.imgUrl}
                 alt="product"
-                className="block mx-auto max-h-[200px] mb-4"
+                className="mx-auto mb-4 block max-h-[200px]"
               />
             </div>
           )}
 
           <div className="mb-3">
-            <label className="border text-white px-4 block w-full text-center rounded-lg cursor-pointer font-bold py-11">
+            <label className="block w-full cursor-pointer rounded-lg border px-4 py-11 text-center font-bold text-white">
               {product.image ? imgUrl.originalFilename : "Upload Image"}
               &nbsp; &nbsp; &nbsp;
               <input
@@ -137,17 +137,17 @@ export default function ProductList() {
                 <label htmlFor="name">Name</label> <br />
                 <input
                   type="text"
-                  className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
+                  className="mb-3 w-[30rem] rounded-lg border bg-[#101011] p-4 text-white"
                   name="name"
                   value={product.name}
                   onChange={changedInputsHandler}
                 />
               </div>
-              <div className="two ml-10 ">
+              <div className="two ml-10">
                 <label htmlFor="price">Price</label> <br />
                 <input
                   type="number"
-                  className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
+                  className="mb-3 w-[30rem] rounded-lg border bg-[#101011] p-4 text-white"
                   name="price"
                   minLength={3}
                   min={100}
@@ -161,7 +161,7 @@ export default function ProductList() {
                 <label htmlFor="quantity">Quantity</label> <br />
                 <input
                   type="number"
-                  className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
+                  className="mb-3 w-[30rem] rounded-lg border bg-[#101011] p-4 text-white"
                   name="quantity"
                   minLength={1}
                   min={1}
@@ -169,11 +169,11 @@ export default function ProductList() {
                   onChange={changedInputsHandler}
                 />
               </div>
-              <div className="two ml-10 ">
+              <div className="two ml-10">
                 <label htmlFor="brand">Brand</label> <br />
                 <input
                   type="text"
-                  className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
+                  className="mb-3 w-[30rem] rounded-lg border bg-[#101011] p-4 text-white"
                   name="brand"
                   value={product.brand}
                   onChange={changedInputsHandler}
@@ -185,7 +185,7 @@ export default function ProductList() {
               Description
             </label>
             <textarea
-              className="p-2 mb-3 bg-[#101011] border rounded-lg w-[95%] text-white"
+              className="mb-3 w-[95%] rounded-lg border bg-[#101011] p-2 text-white"
               name="description"
               value={product.description}
               onChange={changedInputsHandler}
@@ -196,7 +196,7 @@ export default function ProductList() {
                 <label htmlFor="stock">Count In Stock</label> <br />
                 <input
                   type="number"
-                  className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
+                  className="mb-3 w-[30rem] rounded-lg border bg-[#101011] p-4 text-white"
                   name="stock"
                   value={product.stock}
                   minLength={1}
@@ -208,7 +208,7 @@ export default function ProductList() {
               <div>
                 <label htmlFor="category">Category</label> <br />
                 <select
-                  className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
+                  className="mb-3 w-[30rem] rounded-lg border bg-[#101011] p-4 text-white"
                   name="category"
                   value={product.category}
                   onChange={changedInputsHandler}
@@ -228,7 +228,7 @@ export default function ProductList() {
 
             <button
               type="submit"
-              className="py-4 px-10 mt-5 rounded-lg text-lg font-bold bg-pink-600"
+              className="mt-5 rounded-lg bg-pink-600 px-10 py-4 text-lg font-bold"
             >
               Submit
             </button>

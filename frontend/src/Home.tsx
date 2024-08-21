@@ -6,9 +6,7 @@ import Message from "./components/Message";
 import { Link, useParams } from "react-router-dom";
 import Product from "./pages/Products/Product";
 
-type Props = {};
-
-export default function Home({}: Props) {
+export default function Home() {
   const { keyword } = useParams<{ keyword: string }>();
   useEffect(() => {
     if (!keyword) {

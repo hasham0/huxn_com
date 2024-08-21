@@ -1,7 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -9,53 +7,45 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const filePathName = (file) =>
-  path.resolve(__dirname, "../../public/temp/", file.filename);
-
 const uploadOnCloudinary = async (localFilePath) => {
   try {
-    if (!localFilePath || !localFilePath.filename) {
-      throw new Error("Local file path or filename not found");
+    if (!localFilePath) {
+      throw {
+        message: "local file path not found",
+      };
     }
-    const filePath = filePathName(localFilePath);
-    const uploadResult = await cloudinary.uploader.upload(filePath, {
-      filename_override: localFilePath.filename,
-      resource_type: "image",
+    const uploadResult = await cloudinary.uploader.upload(localFilePath, {
+      resource_type: "auto",
       folder: "huxn-web-ecommerce",
-      format: localFilePath.mimetype.split("/")[1], // Extract file extension from mimetype
     });
-
-    fs.unlinkSync(filePath); // Remove the local file after successful upload
+    fs.unlinkSync(localFilePath); //! remove local save file when success to upload
     return uploadResult;
   } catch (error) {
-    console.error("Upload failed:", error.message);
-    const filePath = filePathName(localFilePath);
-    fs.unlinkSync(filePath);
+    fs.unlinkSync(localFilePath); //! remove local save file when fail to upload
     return null;
   }
 };
 
-const updateOnCloudinary = async (localFilePath, pubicId) => {
+const updateOnCloudinary = async (localFilePath, newLocalFilePath) => {
   try {
-    if (!localFilePath || !localFilePath.filename) {
-      throw new Error("Local file path or filename not found");
+    if (!localFilePath) {
+      throw new Error("Local file path not found");
     }
-    const filePath = filePathName(localFilePath);
-    await cloudinary.uploader.destroy(pubicId);
-    const uploadResult = await cloudinary.uploader.upload(filePath, {
-      filename_override: localFilePath.filename,
+
+    const destroyCloudImg = await cloudinary.uploader.destroy(localFilePath, {
       resource_type: "image",
       folder: "huxn-web-ecommerce",
-      format: localFilePath.mimetype.split("/")[1], // Extract file extension from mimetype
     });
-    fs.unlinkSync(filePath); // Remove the local file after successful upload
+
+    const uploadResult = await cloudinary.uploader.upload(newLocalFilePath, {
+      resource_type: "auto",
+      folder: "huxn-web-ecommerce",
+    });
+
+    fs.unlinkSync(newLocalFilePath); //! remove local save file when success to upload
     return uploadResult;
   } catch (error) {
-    console.error("Upload failed:", error.message);
-    const filePath = filePathName(localFilePath);
-    fs.unlinkSync(filePath);
+    fs.unlinkSync(newLocalFilePath); //! remove local saved file when fail to upload
     return null;
   }
 };
